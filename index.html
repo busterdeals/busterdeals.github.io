@@ -2,282 +2,370 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BusterDeals – Cheap Crafting Deals</title>
+<title>BusterDeals – Crafting Catalogue</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
-    --bg: #020617;
-    --card: #020617;
+    --bg: #0b1120;
+    --sidebar-bg: #020617;
+    --sidebar-border: #111827;
+    --content-bg: #f3f4f6;
+    --card-bg: #ffffff;
     --accent: #f6a800;
     --accent-soft: #ffd34d;
-    --text: #f9fafb;
-    --muted: #9ca3af;
-    --border: #1f2937;
-    --danger: #ef4444;
-    --success: #22c55e;
-    --radius: 14px;
-    --shadow: 0 18px 45px rgba(0,0,0,0.7);
+    --accent-dark: #92400e;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --danger: #dc2626;
+    --success: #16a34a;
+    --radius-lg: 18px;
+    --radius-md: 14px;
+    --shadow-soft: 0 18px 40px rgba(15,23,42,0.25);
     --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
   *{box-sizing:border-box}
   body{
     margin:0;
     font-family:var(--font);
-    background:radial-gradient(circle at top,#0f172a 0,#020617 45%,#000 100%);
-    color:var(--text);
+    background:var(--bg);
+    color:var(--text-main);
+  }
+  .layout{
+    display:grid;
+    grid-template-columns:260px minmax(0,1fr);
     min-height:100vh;
   }
-  header{
-    position:sticky;top:0;z-index:20;
-    backdrop-filter:blur(18px);
-    background:rgba(15,23,42,0.92);
-    border-bottom:1px solid rgba(148,163,184,0.25);
-    box-shadow:0 10px 30px rgba(15,23,42,0.8);
-    padding:0.6rem 1.4rem;
-    display:flex;align-items:center;justify-content:space-between;
+  @media(max-width:900px){
+    .layout{grid-template-columns:minmax(0,1fr);}
+    .sidebar{position:static;width:100%;height:auto;flex-direction:row;overflow-x:auto;}
+    .sidebar-nav{flex-direction:row;}
+    .sidebar-nav a{width:auto;min-width:80px;}
   }
-  .logo-wrap{display:flex;align-items:center;gap:.7rem}
-  .logo-wrap img{
-    width:40px;height:40px;border-radius:12px;
-    box-shadow:0 0 25px rgba(246,168,0,0.6);
+  .sidebar{
+    background:radial-gradient(circle at 0 0,#020617,#020617 40%,#000 100%);
+    border-right:1px solid var(--sidebar-border);
+    padding:1.2rem 1rem;
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
   }
-  .logo-text{
-    font-weight:800;letter-spacing:.18em;text-transform:uppercase;
-    font-size:.95rem;color:var(--accent-soft);
+  .sidebar-logo{
+    display:flex;align-items:center;gap:.7rem;
+    padding:.4rem .5rem;
+    border-radius:999px;
+    background:rgba(15,23,42,0.9);
+    border:1px solid rgba(148,163,184,0.4);
   }
-  .top-right{
-    display:flex;align-items:center;gap:.75rem;
+  .sidebar-logo img{
+    width:36px;height:36px;border-radius:12px;
+    box-shadow:0 0 25px rgba(246,168,0,0.7);
+  }
+  .sidebar-logo-text{
+    display:flex;flex-direction:column;
+  }
+  .sidebar-logo-text span:first-child{
+    font-size:.8rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent-soft);
+    font-weight:700;
+  }
+  .sidebar-logo-text span:last-child{
+    font-size:.75rem;
+    color:#9ca3af;
+  }
+  .sidebar-section-title{
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    color:#6b7280;
+    margin-top:.4rem;
+  }
+  .sidebar-nav{
+    display:flex;
+    flex-direction:column;
+    gap:.25rem;
+  }
+  .sidebar-nav a{
+    display:flex;align-items:center;gap:.55rem;
+    padding:.45rem .6rem;
+    border-radius:999px;
+    color:#e5e7eb;
+    text-decoration:none;
+    font-size:.82rem;
+    border:1px solid transparent;
+    transition:.15s ease;
+  }
+  .sidebar-nav a svg{
+    width:16px;height:16px;
+    flex-shrink:0;
+  }
+  .sidebar-nav a span{
+    white-space:nowrap;
+  }
+  .sidebar-nav a:hover{
+    background:rgba(15,23,42,0.9);
+    border-color:rgba(148,163,184,0.5);
+  }
+  .sidebar-nav a.active-link{
+    background:linear-gradient(to right,#f6a800,#ffd34d);
+    color:#111827;
+    border-color:transparent;
+    box-shadow:0 12px 30px rgba(0,0,0,0.6);
+  }
+  .sidebar-nav a.active-link svg path{
+    fill:#111827;
+  }
+  .sidebar-footer{
+    margin-top:auto;
+    font-size:.7rem;
+    color:#6b7280;
+  }
+
+  .content{
+    background:var(--content-bg);
+    padding:1.4rem 1.6rem 1.6rem;
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+  }
+  .top-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:1rem;
+  }
+  .top-bar-left{
+    display:flex;
+    flex-direction:column;
+    gap:.15rem;
+  }
+  .top-title{
+    font-size:1.1rem;
+    font-weight:600;
+    color:#111827;
+  }
+  .top-sub{
+    font-size:.8rem;
+    color:#6b7280;
+  }
+  .top-bar-right{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
   }
   .search-box{
     position:relative;
   }
   .search-box input{
-    padding:.35rem .7rem;
+    padding:.4rem .7rem;
     padding-left:1.9rem;
     border-radius:999px;
-    border:1px solid rgba(148,163,184,0.5);
-    background:rgba(15,23,42,0.95);
-    color:var(--text);
-    font-size:.85rem;
-    width:190px;
+    border:1px solid #d1d5db;
+    background:#f9fafb;
+    font-size:.8rem;
+    color:#111827;
+    width:200px;
   }
   .search-box span{
     position:absolute;left:.6rem;top:50%;
     transform:translateY(-50%);
-    font-size:.8rem;color:var(--muted);
-  }
-  nav{display:flex;align-items:center;gap:.5rem;font-size:.85rem}
-  nav a{
-    color:var(--muted);text-decoration:none;
-    padding:.3rem .7rem;border-radius:999px;border:1px solid transparent;
-    transition:.15s ease;
-  }
-  nav a:hover{
-    color:var(--accent-soft);
-    border-color:rgba(148,163,184,0.4);
-    background:rgba(15,23,42,0.9);
-  }
-  nav a.active-link{
-    color:#0b1120;
-    background:linear-gradient(to right,#f6a800,#ffd34d);
-    border-color:transparent;
-    box-shadow:0 0 25px rgba(248,250,252,0.35);
+    font-size:.8rem;
+    color:#9ca3af;
   }
   .user-pill{
-    display:none;align-items:center;gap:.4rem;
-    padding:.2rem .6rem;border-radius:999px;
-    border:1px solid rgba(148,163,184,0.4);
-    background:rgba(15,23,42,0.9);
-    font-size:.75rem;color:var(--muted);
+    display:none;align-items:center;gap:.35rem;
+    padding:.25rem .6rem;
+    border-radius:999px;
+    border:1px solid #d1d5db;
+    background:#f9fafb;
+    font-size:.75rem;
+    color:#4b5563;
   }
-  .user-pill span{max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .user-pill button{
-    border:none;background:transparent;color:var(--accent-soft);
+    border:none;background:transparent;color:#b91c1c;
     cursor:pointer;font-size:.75rem;
   }
-  main{
-    max-width:1200px;
-    margin:1.5rem auto 3rem;
-    padding:0 1rem;
-    display:grid;
-    grid-template-columns:260px minmax(0,1fr);
-    gap:1.5rem;
+
+  .banner{
+    background:linear-gradient(135deg,#111827,#1f2937);
+    border-radius:var(--radius-lg);
+    padding:1.1rem 1.2rem;
+    color:#e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    box-shadow:var(--shadow-soft);
   }
-  @media(max-width:900px){
-    main{grid-template-columns:minmax(0,1fr);}
-    .sidebar{order:2;margin-top:1rem;}
+  .banner-main{
+    display:flex;flex-direction:column;gap:.25rem;
   }
-  .sidebar{
-    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,0.4);
-    box-shadow:var(--shadow);
-    padding:1rem .9rem;
-    height:fit-content;
+  .banner-title{
+    font-size:1.2rem;
+    font-weight:600;
   }
-  .sidebar h3{
-    margin-top:0;
-    font-size:.9rem;
-    text-transform:uppercase;
-    letter-spacing:.12em;
-    color:var(--muted);
-  }
-  .category-list{
-    display:flex;flex-direction:column;gap:.35rem;
-    margin-bottom:1rem;
-  }
-  .category-btn{
-    width:100%;
-    text-align:left;
-    padding:.35rem .6rem;
-    border-radius:999px;
-    border:1px solid rgba(148,163,184,0.4);
-    background:rgba(15,23,42,0.95);
-    color:var(--muted);
-    font-size:.8rem;
-    cursor:pointer;
-    transition:.15s ease;
-  }
-  .category-btn.active{
-    background:linear-gradient(to right,#f6a800,#ffd34d);
-    color:#0b1120;
-    border-color:transparent;
-  }
-  .sidebar-note{
-    font-size:.75rem;
-    color:var(--muted);
-    margin-top:.6rem;
-  }
-  .page{display:none;animation:fadeIn .25s ease-out}
-  .page.active{display:block}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-  .hero-card{
-    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.06),rgba(15,23,42,0.98));
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,0.4);
-    box-shadow:var(--shadow);
-    padding:1.1rem 1.1rem;
-    margin-bottom:1rem;
-  }
-  .hero-title{
-    font-size:1.3rem;
-    margin:0 0 .3rem;
-  }
-  .hero-title span{
+  .banner-title span{
     background:linear-gradient(to right,#f6a800,#ffd34d,#fff7c2);
     -webkit-background-clip:text;
     color:transparent;
   }
-  .hero-sub{
-    font-size:.9rem;
-    color:var(--muted);
-    margin:0 0 .8rem;
+  .banner-sub{
+    font-size:.85rem;
+    color:#d1d5db;
   }
-  .hero-metrics{
+  .banner-tagline{
+    font-size:.78rem;
+    color:#9ca3af;
+  }
+  .banner-metrics{
+    display:flex;
+    gap:.6rem;
+    flex-wrap:wrap;
+  }
+  .banner-pill{
+    padding:.3rem .6rem;
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,0.6);
+    font-size:.75rem;
+    color:#e5e7eb;
+    background:rgba(15,23,42,0.8);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:2fr 1.4fr;
+    gap:1rem;
+  }
+  @media(max-width:1000px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .card{
+    background:var(--card-bg);
+    border-radius:var(--radius-lg);
+    padding:1rem 1rem;
+    box-shadow:var(--shadow-soft);
+    border:1px solid #e5e7eb;
+  }
+  .card h2{
+    margin:0 0 .4rem;
+    font-size:.95rem;
+    font-weight:600;
+    color:#111827;
+  }
+  .card-sub{
+    margin:0 0 .8rem;
+    font-size:.8rem;
+    color:#6b7280;
+  }
+
+  .metrics-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
     gap:.6rem;
   }
-  .metric{
-    padding:.55rem .6rem;
-    border-radius:12px;
-    border:1px solid rgba(148,163,184,0.4);
-    background:rgba(15,23,42,0.96);
+  .metric-card{
+    background:#f9fafb;
+    border-radius:var(--radius-md);
+    padding:.6rem .7rem;
+    border:1px solid #e5e7eb;
     font-size:.8rem;
   }
-  .metric strong{display:block;font-size:.95rem;color:var(--accent-soft);}
-  .section-title{
-    margin:1.2rem 0 .4rem;
-    font-size:1rem;
+  .metric-card strong{
+    display:block;
+    font-size:.9rem;
+    color:#111827;
   }
-  .section-sub{
-    margin:0 0 .8rem;
-    font-size:.85rem;
-    color:var(--muted);
+  .metric-card span{
+    color:#6b7280;
   }
+
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:.25rem;
-    padding:.45rem .9rem;
+    padding:.4rem .8rem;
     border-radius:999px;
-    border:1px solid rgba(148,163,184,0.5);
-    background:rgba(15,23,42,0.96);
-    color:var(--accent-soft);
-    font-size:.8rem;
-    font-weight:600;
+    border:1px solid #d1d5db;
+    background:#f9fafb;
+    font-size:.78rem;
     cursor:pointer;
-    transition:.15s ease;
+    color:#111827;
   }
   .btn-primary{
     background:linear-gradient(to right,#f6a800,#ffd34d);
-    color:#0b1120;
     border-color:transparent;
-    box-shadow:0 18px 40px rgba(0,0,0,0.8);
+    color:#111827;
+    font-weight:600;
   }
-  .btn-primary:hover{transform:translateY(-1px);}
-  .btn-outline:hover{
-    border-color:rgba(248,250,252,0.6);
-    background:rgba(15,23,42,0.98);
+  .btn-outline{
+    background:#f9fafb;
   }
+
+  .page{display:none;}
+  .page.active{display:block;}
+
   .catalogue-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:.9rem;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:.7rem;
   }
   .item-card{
-    position:relative;
-    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
-    border-radius:var(--radius);
-    padding:.8rem .85rem .9rem;
-    border:1px solid rgba(148,163,184,0.4);
-    box-shadow:0 14px 35px rgba(15,23,42,0.9);
+    background:#ffffff;
+    border-radius:var(--radius-md);
+    padding:.7rem .75rem .8rem;
+    border:1px solid #e5e7eb;
+    box-shadow:0 10px 25px rgba(15,23,42,0.08);
     font-size:.8rem;
-    display:flex;flex-direction:column;gap:.3rem;
+    position:relative;
   }
   .item-header{
     display:flex;justify-content:space-between;align-items:baseline;gap:.4rem;
   }
-  .item-name{font-weight:600;}
+  .item-name{font-weight:600;color:#111827;}
   .item-category{
     font-size:.7rem;
     text-transform:uppercase;
     letter-spacing:.12em;
-    color:var(--muted);
+    color:#9ca3af;
   }
   .item-meta{
     display:flex;justify-content:space-between;
-    color:var(--muted);font-size:.78rem;
+    font-size:.78rem;
+    color:#6b7280;
+    margin-top:.2rem;
   }
   .item-desc{
-    color:var(--muted);
+    margin-top:.25rem;
     font-size:.78rem;
+    color:#6b7280;
   }
   .item-actions{
     display:flex;justify-content:space-between;align-items:center;
-    margin-top:.3rem;gap:.4rem;
+    margin-top:.4rem;gap:.4rem;
   }
   .qty-input{
     display:flex;align-items:center;gap:.25rem;
-    color:var(--muted);font-size:.78rem;
+    font-size:.78rem;
+    color:#6b7280;
   }
   .qty-input input{
     width:52px;
-    padding:.25rem .35rem;
+    padding:.25rem .3rem;
     border-radius:999px;
-    border:1px solid rgba(148,163,184,0.5);
-    background:rgba(15,23,42,0.95);
-    color:var(--text);
+    border:1px solid #d1d5db;
     font-size:.78rem;
   }
   .out-stock-overlay{
     position:absolute;
     inset:0;
-    background:rgba(15,23,42,0.9);
+    background:rgba(249,250,251,0.9);
     border-radius:inherit;
     display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
-    flex-direction:column;
     gap:.2rem;
+    text-align:center;
   }
   .out-stock-text{
     color:var(--danger);
@@ -285,62 +373,57 @@
     font-size:.9rem;
   }
   .out-stock-sub{
-    color:var(--muted);
+    color:#6b7280;
     font-size:.75rem;
   }
-  .card{
-    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,0.4);
-    box-shadow:var(--shadow);
-    padding:1rem 1rem;
-    margin-bottom:1rem;
-    font-size:.85rem;
-  }
-  .card h3{margin-top:0;font-size:.95rem;}
+
   label{
     display:block;
     font-size:.78rem;
-    color:var(--muted);
+    color:#6b7280;
     margin-bottom:.2rem;
   }
   input,textarea{
     width:100%;
     padding:.45rem .55rem;
     border-radius:10px;
-    border:1px solid rgba(148,163,184,0.5);
-    background:rgba(15,23,42,0.95);
-    color:var(--text);
+    border:1px solid #d1d5db;
     font-size:.85rem;
+    background:#f9fafb;
   }
   textarea{resize:vertical;min-height:70px;}
   input:focus,textarea:focus{
     outline:1px solid var(--accent);
     border-color:var(--accent);
+    background:#ffffff;
   }
   .status{
     font-size:.78rem;
     margin-top:.35rem;
-    color:var(--muted);
+    color:#6b7280;
   }
   .status.error{color:var(--danger);}
   .status.success{color:var(--success);}
-  ul{padding-left:1.1rem;margin:.3rem 0;font-size:.82rem;}
+
   .receipt-box{
-    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,0.4);
-    box-shadow:var(--shadow);
+    background:#ffffff;
+    border-radius:var(--radius-lg);
     padding:1rem 1rem;
+    border:1px solid #e5e7eb;
+    box-shadow:var(--shadow-soft);
     font-size:.85rem;
   }
   .receipt-box p{margin:.2rem 0;}
-  .muted{color:var(--muted);font-size:.78rem;}
+  .muted{color:#6b7280;font-size:.78rem;}
+
   .admin-tag{
     display:inline-flex;align-items:center;gap:.25rem;
-    font-size:.75rem;padding:.2rem .55rem;border-radius:999px;
-    border:1px solid rgba(248,250,252,0.4);
-    background:rgba(15,23,42,0.95);color:var(--accent-soft);
+    font-size:.75rem;
+    padding:.2rem .55rem;
+    border-radius:999px;
+    border:1px solid #fbbf24;
+    background:#fffbeb;
+    color:#92400e;
     margin-left:.4rem;
   }
   .admin-table{
@@ -350,19 +433,21 @@
     margin-top:.4rem;
   }
   .admin-table th,.admin-table td{
-    border-bottom:1px solid rgba(148,163,184,0.3);
+    border-bottom:1px solid #e5e7eb;
     padding:.3rem .25rem;
     text-align:left;
   }
-  .admin-table th{color:var(--muted);font-weight:600;}
+  .admin-table th{
+    color:#6b7280;
+    font-weight:600;
+  }
   .admin-table input[type="number"]{
     width:70px;
     font-size:.78rem;
     padding:.2rem .3rem;
     border-radius:8px;
-    border:1px solid rgba(148,163,184,0.5);
-    background:rgba(15,23,42,0.95);
-    color:var(--text);
+    border:1px solid #d1d5db;
+    background:#f9fafb;
   }
   .admin-table input[type="checkbox"]{
     transform:scale(1.1);
@@ -371,197 +456,238 @@
     font-size:.75rem;
     padding:.25rem .6rem;
     border-radius:999px;
-    border:1px solid rgba(148,163,184,0.4);
-    background:rgba(15,23,42,0.95);
-    color:var(--accent-soft);
+    border:1px solid #d1d5db;
+    background:#f9fafb;
     cursor:pointer;
   }
+
   footer{
-    text-align:center;
-    padding:1.1rem 1rem 1.4rem;
-    font-size:.78rem;
-    color:var(--muted);
-    border-top:1px solid rgba(148,163,184,0.25);
-    background:radial-gradient(circle at top,rgba(15,23,42,0.9),rgba(2,6,23,1));
+    text-align:right;
+    padding:.7rem 1.6rem 1rem;
+    font-size:.75rem;
+    color:#6b7280;
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-wrap">
-    <img src="bd-logo.png" alt="BusterDeals Logo">
-    <div class="logo-text">BUSTERDEALS</div>
-  </div>
-  <div class="top-right">
-    <div class="search-box">
-      <span>🔍</span>
-      <input id="search-input" placeholder="Search items...">
-    </div>
-    <nav>
-      <a href="#" data-page="home" class="active-link">Home</a>
-      <a href="#" data-page="catalogue">Catalogue</a>
-      <a href="#" data-page="checkout">Checkout</a>
-      <a href="#" data-page="receipt">Receipt</a>
-      <a href="#" data-page="admin">Admin</a>
-      <a href="#" data-page="login">Login</a>
-      <div id="user-pill" class="user-pill">
-        <span id="user-name"></span>
-        <button id="logout-btn">Logout</button>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<main>
+<div class="layout">
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <h3>Categories</h3>
-    <div id="category-list" class="category-list"></div>
-    <p class="sidebar-note">
-      Toggle items to <strong>X / Out of Stock</strong> in the admin panel to temporarily disable them from the catalogue.
-    </p>
+    <div class="sidebar-logo">
+      <img src="bd-logo.png" alt="BusterDeals Logo">
+      <div class="sidebar-logo-text">
+        <span>BUSTERDEALS</span>
+        <span>Crafting Network</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Navigation</div>
+      <nav class="sidebar-nav">
+        <a href="#" data-page="home" class="active-link">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M10 2 2 8h2v8h4v-5h4v5h4V8h2L10 2z"/></svg>
+          <span>Overview</span>
+        </a>
+        <a href="#" data-page="catalogue">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M3 4h6v6H3V4zm8 0h6v6h-6V4zM3 12h6v6H3v-6zm8 0h6v6h-6v-6z"/></svg>
+          <span>Catalogue</span>
+        </a>
+        <a href="#" data-page="checkout">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M3 4h2l1 9h10l1-7H7"/><circle cx="8" cy="16" r="1.2" fill="#9ca3af"/><circle cx="14" cy="16" r="1.2" fill="#9ca3af"/></svg>
+          <span>Checkout</span>
+        </a>
+        <a href="#" data-page="receipt">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M5 2h10v16l-2-1-2 1-2-1-2 1-2-1V2z"/><path fill="#fef3c7" d="M7 5h6v1H7zm0 3h6v1H7zm0 3h4v1H7z"/></svg>
+          <span>Receipt</span>
+        </a>
+      </nav>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Owner</div>
+      <nav class="sidebar-nav">
+        <a href="#" data-page="admin">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M10 2 3 5v4c0 4 3 7.5 7 9 4-1.5 7-5 7-9V5l-7-3z"/><path fill="#fef3c7" d="M10 6a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>
+          <span>Admin Panel</span>
+        </a>
+        <a href="#" data-page="login">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M9 3h8v14H9v-2h2v-2H9v-2h2V9H9V7h2V5H9V3z"/><path fill="#9ca3af" d="M3 10 7 6v3h4v2H7v3z"/></svg>
+          <span>Login</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      © BusterDeals<br>All prices and stock are owner‑defined.
+    </div>
   </aside>
 
-  <section>
-    <!-- HOME -->
-    <section id="home" class="page active">
-      <div class="hero-card">
-        <h1 class="hero-title"><span>BusterDeals</span> Crafting Network</h1>
-        <p class="hero-sub">
-          Full crafting catalogue for your RP server. Build orders, generate receipts, and manage prices and stock from the owner panel.
-        </p>
-        <div class="hero-metrics">
-          <div class="metric">
-            <strong id="metric-items">0 items</strong>
-            <span class="muted">In your current order</span>
-          </div>
-          <div class="metric">
-            <strong id="metric-total">0 credits</strong>
-            <span class="muted">Estimated total cost</span>
-          </div>
-          <div class="metric">
-            <strong id="metric-time">0 min</strong>
-            <span class="muted">Total craft time</span>
-          </div>
-          <div class="metric">
-            <strong>Redeem In‑Game</strong>
-            <span class="muted">Show receipt to Ollie Buster to collect</span>
-          </div>
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <div class="top-title">BusterDeals Crafting Dashboard</div>
+        <div class="top-sub">Vault‑Corp–style interface for your RP crafting business.</div>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box">
+          <span>🔍</span>
+          <input id="search-input" placeholder="Search catalogue...">
+        </div>
+        <div id="user-pill" class="user-pill">
+          <span id="user-name"></span>
+          <button id="logout-btn">Logout</button>
         </div>
       </div>
+    </div>
 
-      <h2 class="section-title">How it works</h2>
-      <p class="section-sub">Simple RP‑friendly flow. No player accounts, just receipts.</p>
-      <div class="card">
-        <ul>
-          <li><strong>1.</strong> Open the <strong>Catalogue</strong> and add craftable items to your order.</li>
-          <li><strong>2.</strong> Go to <strong>Checkout</strong>, enter your in‑game name, phone, and bank number.</li>
-          <li><strong>3.</strong> Submit to generate a unique <strong>BusterDeals receipt code</strong>.</li>
-          <li><strong>4.</strong> Show that code to <strong>Ollie Buster</strong> in‑game via text, phone, or in person.</li>
-        </ul>
+    <div class="banner">
+      <div class="banner-main">
+        <div class="banner-title"><span>It’s okay to order.</span> We’ll craft it.</div>
+        <div class="banner-sub">Use this panel to build orders, generate receipts, and manage your crafting catalogue.</div>
+        <div class="banner-tagline">In‑game: contact <strong>Ollie Buster</strong> with your receipt code to redeem.</div>
       </div>
-    </section>
+      <div class="banner-metrics">
+        <div class="banner-pill" id="metric-items">0 items in order</div>
+        <div class="banner-pill" id="metric-total">0 credits total</div>
+        <div class="banner-pill" id="metric-time">0 min craft time</div>
+      </div>
+    </div>
 
-    <!-- CATALOGUE -->
-    <section id="catalogue" class="page">
-      <h2 class="section-title">Crafting Catalogue</h2>
-      <p class="section-sub">Only craftable items. Prices and stock are controlled by you in the admin panel.</p>
-      <div id="catalogue-grid" class="catalogue-grid"></div>
-    </section>
+    <div class="grid">
+      <!-- LEFT COLUMN (HOME / CATALOGUE / CHECKOUT / RECEIPT) -->
+      <div>
+        <!-- HOME -->
+        <section id="home" class="page active">
+          <div class="card">
+            <h2>Overview</h2>
+            <p class="card-sub">Quick summary of how BusterDeals works for players and for you as the owner.</p>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <strong>Player Flow</strong>
+                <span>Browse catalogue, add items, checkout, get a receipt code, redeem in‑game.</span>
+              </div>
+              <div class="metric-card">
+                <strong>Owner Control</strong>
+                <span>Adjust prices, craft times, and mark items as out of stock from the admin panel.</span>
+              </div>
+              <div class="metric-card">
+                <strong>RP Friendly</strong>
+                <span>No accounts, no logins for players. Just receipts and in‑game contact.</span>
+              </div>
+              <div class="metric-card">
+                <strong>Local Only</strong>
+                <span>All data is stored in this browser. You control everything.</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    <!-- CHECKOUT -->
-    <section id="checkout" class="page">
-      <h2 class="section-title">Checkout</h2>
-      <p class="section-sub">Review your order and enter your in‑game details. Notes are cleared after a successful checkout.</p>
+        <!-- CATALOGUE -->
+        <section id="catalogue" class="page">
+          <div class="card">
+            <h2>Crafting Catalogue</h2>
+            <p class="card-sub">Only craftable items. Prices and stock are controlled by you in the admin panel.</p>
+            <div id="catalogue-grid" class="catalogue-grid"></div>
+          </div>
+        </section>
 
-      <div class="card">
-        <h3>Order Summary</h3>
-        <div id="cart-list"></div>
+        <!-- CHECKOUT -->
+        <section id="checkout" class="page">
+          <div class="card">
+            <h2>Checkout</h2>
+            <p class="card-sub">Review your order and enter your in‑game details. Notes are cleared after a successful checkout.</p>
+
+            <div id="cart-list" style="margin-bottom:.8rem;"></div>
+
+            <label>In‑Game Name</label>
+            <input id="ingame-name" placeholder="e.g. Ollie Buster">
+
+            <label style="margin-top:.4rem;">In‑Game Phone Number</label>
+            <input id="ingame-phone" placeholder="e.g. 123‑456">
+
+            <label style="margin-top:.4rem;">Bank Number</label>
+            <input id="ingame-bank" placeholder="e.g. 12345678">
+
+            <label style="margin-top:.4rem;">Notes (optional)</label>
+            <textarea id="ingame-notes" placeholder="Where to meet, preferred time, extra info..."></textarea>
+
+            <button class="btn btn-primary" style="margin-top:.7rem;" onclick="submitOrder()">Submit Order & Generate Receipt</button>
+            <div id="checkout-status" class="status"></div>
+          </div>
+        </section>
+
+        <!-- RECEIPT -->
+        <section id="receipt" class="page">
+          <div class="card">
+            <h2>Receipt</h2>
+            <p class="card-sub">Show this receipt to <strong>Ollie Buster</strong> in‑game to get your order crafted.</p>
+
+            <div class="receipt-box">
+              <p><strong>Order Code:</strong> <span id="r-code"></span></p>
+              <p><strong>Name:</strong> <span id="r-name"></span></p>
+              <p><strong>Phone:</strong> <span id="r-phone"></span></p>
+              <p><strong>Bank:</strong> <span id="r-bank"></span></p>
+              <p><strong>Notes:</strong> <span id="r-notes"></span></p>
+
+              <h3 style="margin-top:.8rem;">Items</h3>
+              <ul id="r-items"></ul>
+
+              <p><strong>Total Price:</strong> <span id="r-total"></span></p>
+              <p><strong>Total Craft Time:</strong> <span id="r-time"></span> minutes</p>
+
+              <p class="muted" style="margin-top:.8rem;">Tip: Screenshot this page or keep it open before joining the server.</p>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <div class="card">
-        <h3>In‑Game Details</h3>
-        <label>In‑Game Name</label>
-        <input id="ingame-name" placeholder="e.g. Ollie Buster">
+      <!-- RIGHT COLUMN (LOGIN / ADMIN) -->
+      <div>
+        <!-- LOGIN -->
+        <section id="login" class="page">
+          <div class="card">
+            <h2>Admin Login</h2>
+            <p class="card-sub">Owner‑only access. Email + password required.</p>
 
-        <label>In‑Game Phone Number</label>
-        <input id="ingame-phone" placeholder="e.g. 123‑456">
+            <label>Admin Email</label>
+            <input id="admin-email" placeholder="Your admin email">
 
-        <label>Bank Number</label>
-        <input id="ingame-bank" placeholder="e.g. 12345678">
+            <label style="margin-top:.4rem;">Password</label>
+            <input id="admin-pass" type="password" placeholder="Admin password">
 
-        <label>Notes (optional)</label>
-        <textarea id="ingame-notes" placeholder="Where to meet, preferred time, extra info..."></textarea>
+            <button class="btn btn-primary" style="margin-top:.7rem;" onclick="adminLogin()">Login</button>
+            <div id="login-status" class="status"></div>
+          </div>
+        </section>
 
-        <button class="btn btn-primary" style="margin-top:0.7rem;" onclick="submitOrder()">Submit Order & Generate Receipt</button>
-        <div id="checkout-status" class="status"></div>
+        <!-- ADMIN -->
+        <section id="admin" class="page">
+          <div class="card">
+            <h2>Admin Panel <span class="admin-tag">Owner Only</span></h2>
+            <p class="card-sub">Manage craft prices, times, and stock. Changes are stored locally in this browser.</p>
+
+            <div id="admin-locked">
+              <p class="status error">Admin access denied. Use the Login section with the correct email and password.</p>
+              <button class="btn btn-outline" onclick="goTo('login')">Go to Login</button>
+            </div>
+
+            <div id="admin-content" style="display:none;">
+              <table class="admin-table" id="admin-table"></table>
+              <button class="small-btn" style="margin-top:.6rem;" onclick="saveAdminEdits()">Save Changes</button>
+              <span id="admin-status" class="status"></span>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
 
-    <!-- RECEIPT -->
-    <section id="receipt" class="page">
-      <h2 class="section-title">Receipt</h2>
-      <p class="section-sub">Show this receipt to <strong>Ollie Buster</strong> in‑game to get your order crafted.</p>
-
-      <div class="receipt-box">
-        <p><strong>Order Code:</strong> <span id="r-code"></span></p>
-        <p><strong>Name:</strong> <span id="r-name"></span></p>
-        <p><strong>Phone:</strong> <span id="r-phone"></span></p>
-        <p><strong>Bank:</strong> <span id="r-bank"></span></p>
-        <p><strong>Notes:</strong> <span id="r-notes"></span></p>
-
-        <h3 style="margin-top:0.8rem;">Items</h3>
-        <ul id="r-items"></ul>
-
-        <p><strong>Total Price:</strong> <span id="r-total"></span></p>
-        <p><strong>Total Craft Time:</strong> <span id="r-time"></span> minutes</p>
-
-        <p class="muted" style="margin-top:0.8rem;">Tip: Screenshot this page or keep it open before joining the server.</p>
-      </div>
-    </section>
-
-    <!-- LOGIN -->
-    <section id="login" class="page">
-      <h2 class="section-title">Admin Login</h2>
-      <p class="section-sub">Owner‑only access. Email + password required.</p>
-
-      <div class="card">
-        <label>Admin Email</label>
-        <input id="admin-email" placeholder="Your admin email">
-
-        <label>Password</label>
-        <input id="admin-pass" type="password" placeholder="Admin password">
-
-        <button class="btn btn-primary" style="margin-top:0.7rem;" onclick="adminLogin()">Login</button>
-        <div id="login-status" class="status"></div>
-      </div>
-    </section>
-
-    <!-- ADMIN -->
-    <section id="admin" class="page">
-      <h2 class="section-title">Admin Panel <span class="admin-tag">Owner Only</span></h2>
-      <p class="section-sub">Manage craft prices, times, and stock. Changes are stored locally in this browser.</p>
-
-      <div id="admin-locked" class="card">
-        <p class="status error">Admin access denied. Use the Login page with the correct email and password.</p>
-        <button class="btn btn-outline" onclick="goTo('login')">Go to Login</button>
-      </div>
-
-      <div id="admin-content" style="display:none;">
-        <div class="card">
-          <h3>Items</h3>
-          <table class="admin-table" id="admin-table"></table>
-          <button class="small-btn" style="margin-top:0.6rem;" onclick="saveAdminEdits()">Save Changes</button>
-          <span id="admin-status" class="status"></span>
-        </div>
-      </div>
-    </section>
-  </section>
-</main>
-
-<footer>
-  © BusterDeals – Crafting network by Ollie Buster. All prices and stock are owner‑defined.
-</footer>
+    <footer>
+      BusterDeals – Vault‑Corp–style crafting dashboard by Ollie Buster.
+    </footer>
+  </div>
+</div>
 
 <script>
   // ===== Anti‑casual inspect (cannot stop pros) =====
@@ -576,7 +702,6 @@
     setInterval(function(){
       if (window.outerWidth - window.innerWidth > threshold ||
           window.outerHeight - window.innerHeight > threshold) {
-        // light annoyance only
         console.clear();
       }
     }, 1000);
@@ -589,30 +714,30 @@
   const _em = () => _x('YnJpdGlzaGx1Y2lvYnVzaW5lc3NA','Z21haWwuY29t');
   const _pw = () => _x('QnVzdGVyT25Ub3Ay','MDI0');
 
-  const STORAGE_ITEMS_KEY = "bd_items_override_v2";
-  const STORAGE_CART_KEY = "bd_cart_v2";
-  const STORAGE_RECEIPT_KEY = "bd_receipt_v2";
-  const STORAGE_USER_KEY = "bd_user_local_v2";
+  const STORAGE_ITEMS_KEY = "bd_items_override_v3";
+  const STORAGE_CART_KEY = "bd_cart_v3";
+  const STORAGE_RECEIPT_KEY = "bd_receipt_v3";
+  const STORAGE_USER_KEY = "bd_user_local_v3";
 
   // ===== NAV / PAGES =====
   function goTo(pageId){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
-    document.querySelectorAll('nav a[data-page]').forEach(a=>{
+    document.querySelectorAll('.sidebar-nav a[data-page]').forEach(a=>{
       a.classList.toggle('active-link',a.getAttribute('data-page')===pageId);
     });
     if(pageId==='checkout') renderCart();
     if(pageId==='receipt') loadReceipt();
     if(pageId==='admin') updateAdminVisibility();
   }
-  document.querySelectorAll('nav a[data-page]').forEach(a=>{
+  document.querySelectorAll('.sidebar-nav a[data-page]').forEach(a=>{
     a.addEventListener('click',e=>{
       e.preventDefault();
       goTo(a.getAttribute('data-page'));
     });
   });
 
-  // ===== BASE CRAFTABLE ITEMS (PERP‑style, you own prices) =====
+  // ===== BASE CRAFTABLE ITEMS =====
   const baseItems = [
     // Weapons
     { id:1, name:"9mm Pistol", category:"Weapons", price:4500, time:12, desc:"Standard sidearm, reliable and compact.", outOfStock:false },
@@ -631,7 +756,7 @@
     { id:23, name:"Rifle Ammo Box", category:"Ammo", price:750, time:5, desc:"Ammo for rifles.", outOfStock:false },
     { id:24, name:"Shotgun Shells", category:"Ammo", price:650, time:4, desc:"Shells for shotguns.", outOfStock:false },
 
-    // Crafting Materials
+    // Materials
     { id:40, name:"Refined Metal", category:"Materials", price:200, time:2, desc:"Base material for most weapons.", outOfStock:false },
     { id:41, name:"High‑Grade Metal", category:"Materials", price:450, time:4, desc:"Used for advanced weapons.", outOfStock:false },
     { id:42, name:"Gunpowder Mix", category:"Materials", price:300, time:3, desc:"Used for ammo crafting.", outOfStock:false },
@@ -646,7 +771,7 @@
     { id:63, name:"Precision Drill", category:"Tools", price:1200, time:7, desc:"Used for barrel and frame work.", outOfStock:false },
     { id:64, name:"Metal Saw", category:"Tools", price:900, time:6, desc:"Cuts metal parts to size.", outOfStock:false },
 
-    // Furniture (craftable)
+    // Furniture
     { id:80, name:"Weapon Locker", category:"Furniture", price:6000, time:20, desc:"Secure storage for weapons.", outOfStock:false },
     { id:81, name:"Ammo Crate", category:"Furniture", price:3500, time:15, desc:"Storage for ammunition.", outOfStock:false },
     { id:82, name:"Workbench Table", category:"Furniture", price:2800, time:14, desc:"Dedicated crafting surface.", outOfStock:false },
@@ -672,27 +797,6 @@
 
   let items = getItems();
 
-  // ===== SIDEBAR CATEGORIES =====
-  const categoryListEl = document.getElementById("category-list");
-  let activeCategory = "All";
-
-  function buildCategorySidebar(){
-    const cats = Array.from(new Set(items.map(i=>i.category))).sort();
-    const all = ["All",...cats];
-    categoryListEl.innerHTML="";
-    all.forEach(cat=>{
-      const btn=document.createElement("button");
-      btn.className="category-btn"+(cat===activeCategory?" active":"");
-      btn.textContent=cat;
-      btn.addEventListener("click",()=>{
-        activeCategory=cat;
-        buildCategorySidebar();
-        renderCatalogue();
-      });
-      categoryListEl.appendChild(btn);
-    });
-  }
-
   // ===== CATALOGUE =====
   const catalogueGrid = document.getElementById("catalogue-grid");
   const searchInput = document.getElementById("search-input");
@@ -701,17 +805,15 @@
     const term = (searchInput.value || "").toLowerCase();
     catalogueGrid.innerHTML="";
     let filtered = items;
-    if(activeCategory!=="All"){
-      filtered = filtered.filter(i=>i.category===activeCategory);
-    }
     if(term){
       filtered = filtered.filter(i =>
         i.name.toLowerCase().includes(term) ||
-        (i.desc||"").toLowerCase().includes(term)
+        (i.desc||"").toLowerCase().includes(term) ||
+        i.category.toLowerCase().includes(term)
       );
     }
     if(!filtered.length){
-      catalogueGrid.innerHTML="<p class='muted'>No items match your filters.</p>";
+      catalogueGrid.innerHTML="<p class='muted'>No items match your search.</p>";
       return;
     }
     filtered.forEach(item=>{
@@ -826,9 +928,9 @@
       time+=i.time*i.qty;
       count+=i.qty;
     });
-    document.getElementById("metric-items").textContent=`${count} item${count===1?"":"s"}`;
-    document.getElementById("metric-total").textContent=`${total} credits`;
-    document.getElementById("metric-time").textContent=`${time} min`;
+    document.getElementById("metric-items").textContent=`${count} item${count===1?"":"s"} in order`;
+    document.getElementById("metric-total").textContent=`${total} credits total`;
+    document.getElementById("metric-time").textContent=`${time} min craft time`;
   }
 
   // ===== CHECKOUT / RECEIPT =====
@@ -927,7 +1029,6 @@
       }
     });
     saveItems(items);
-    buildCategorySidebar();
     renderCatalogue();
     const status=document.getElementById("admin-status");
     status.textContent="Saved.";
@@ -998,7 +1099,6 @@
   }
 
   // ===== INIT =====
-  buildCategorySidebar();
   renderCatalogue();
   updateMetrics();
   updateUserUI();
