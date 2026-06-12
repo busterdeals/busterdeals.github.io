@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BusterDeals – A Cheap Catalogue Service</title>
+<title>BusterDeals – Crafting Catalogue</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
@@ -13,7 +13,6 @@
     --card-bg: #ffffff;
     --accent: #f6a800;
     --accent-soft: #ffd34d;
-    --accent-dark: #92400e;
     --text-main: #111827;
     --text-muted: #6b7280;
     --danger: #dc2626;
@@ -230,6 +229,17 @@
     font-size:.75rem;
     color:#e5e7eb;
     background:rgba(15,23,42,0.8);
+  }
+
+  .disclaimer{
+    background:#fef3c7;
+    border:1px solid #fcd34d;
+    color:#92400e;
+    padding:10px 14px;
+    border-radius:10px;
+    font-size:.85rem;
+    font-weight:600;
+    text-align:center;
   }
 
   .grid{
@@ -461,6 +471,32 @@
     cursor:pointer;
   }
 
+  .announcement-list{
+    display:flex;
+    flex-direction:column;
+    gap:.5rem;
+    font-size:.82rem;
+  }
+  .announcement-item{
+    background:#ffffff;
+    border-radius:var(--radius-md);
+    padding:.6rem .7rem;
+    border:1px solid #e5e7eb;
+  }
+  .announcement-title{
+    font-weight:600;
+    color:#111827;
+  }
+  .announcement-meta{
+    font-size:.7rem;
+    color:#9ca3af;
+    margin-top:.1rem;
+  }
+  .announcement-body{
+    margin-top:.25rem;
+    color:#4b5563;
+  }
+
   footer{
     text-align:right;
     padding:.7rem 1.6rem 1rem;
@@ -488,6 +524,10 @@
         <a href="#" data-page="home" class="active-link">
           <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M10 2 2 8h2v8h4v-5h4v5h4V8h2L10 2z"/></svg>
           <span>Overview</span>
+        </a>
+        <a href="#" data-page="announcements">
+          <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M3 4h14v3H3zM3 9h10v3H3zM3 14h7v3H3z"/></svg>
+          <span>Announcements</span>
         </a>
         <a href="#" data-page="catalogue">
           <svg viewBox="0 0 20 20"><path fill="#9ca3af" d="M3 4h6v6H3V4zm8 0h6v6h-6V4zM3 12h6v6H3v-6zm8 0h6v6h-6v-6z"/></svg>
@@ -528,7 +568,7 @@
     <div class="top-bar">
       <div class="top-bar-left">
         <div class="top-title">BusterDeals Crafting Dashboard</div>
-        <div class="top-sub">Vault‑Corp–style interface for your RP crafting business.</div>
+        <div class="top-sub">In‑game crafting orders, catalogue, and admin controls.</div>
       </div>
       <div class="top-bar-right">
         <div class="search-box">
@@ -545,7 +585,7 @@
     <div class="banner">
       <div class="banner-main">
         <div class="banner-title"><span>It’s okay to order.</span> We’ll craft it.</div>
-        <div class="banner-sub">Use this panel to build orders, generate receipts, and manage your crafting catalogue.</div>
+        <div class="banner-sub">Use this panel to build orders, generate receipts, and manage your in‑game crafting catalogue.</div>
         <div class="banner-tagline">In‑game: contact <strong>Ollie Buster</strong> with your receipt code to redeem.</div>
       </div>
       <div class="banner-metrics">
@@ -555,14 +595,18 @@
       </div>
     </div>
 
+    <div class="disclaimer">
+      DISCLAIMER: ALL WEAPONRY DISPLAYED HERE IS FICTIONAL AND EXISTS ONLY IN‑GAME. NONE OF THESE ITEMS ARE REAL OR REPRESENT REAL‑WORLD WEAPONS.
+    </div>
+
     <div class="grid">
-      <!-- LEFT COLUMN (HOME / CATALOGUE / CHECKOUT / RECEIPT) -->
+      <!-- LEFT COLUMN -->
       <div>
         <!-- HOME -->
         <section id="home" class="page active">
           <div class="card">
             <h2>Overview</h2>
-            <p class="card-sub">Quick summary of how BusterDeals works for players and for you as the owner.</p>
+            <p class="card-sub">How players use this and how you control it.</p>
             <div class="metrics-grid">
               <div class="metric-card">
                 <strong>Player Flow</strong>
@@ -570,11 +614,11 @@
               </div>
               <div class="metric-card">
                 <strong>Owner Control</strong>
-                <span>Adjust prices, craft times, and mark items as out of stock from the admin panel.</span>
+                <span>Adjust prices, craft times, stock, and announcements from the admin panel.</span>
               </div>
               <div class="metric-card">
                 <strong>RP Friendly</strong>
-                <span>No accounts, no logins for players. Just receipts and in‑game contact.</span>
+                <span>No accounts for players. Just receipts and in‑game contact.</span>
               </div>
               <div class="metric-card">
                 <strong>Local Only</strong>
@@ -584,11 +628,20 @@
           </div>
         </section>
 
+        <!-- ANNOUNCEMENTS -->
+        <section id="announcements" class="page">
+          <div class="card">
+            <h2>Announcements</h2>
+            <p class="card-sub">Server‑wide updates, stock changes, and important info.</p>
+            <div id="announcement-list" class="announcement-list"></div>
+          </div>
+        </section>
+
         <!-- CATALOGUE -->
         <section id="catalogue" class="page">
           <div class="card">
             <h2>Crafting Catalogue</h2>
-            <p class="card-sub">Only craftable items. Prices and stock are controlled by you in the admin panel.</p>
+            <p class="card-sub">Fictional in‑game weapons, ammo, tools, furniture, and materials.</p>
             <div id="catalogue-grid" class="catalogue-grid"></div>
           </div>
         </section>
@@ -643,7 +696,7 @@
         </section>
       </div>
 
-      <!-- RIGHT COLUMN (LOGIN / ADMIN) -->
+      <!-- RIGHT COLUMN -->
       <div>
         <!-- LOGIN -->
         <section id="login" class="page">
@@ -666,7 +719,7 @@
         <section id="admin" class="page">
           <div class="card">
             <h2>Admin Panel <span class="admin-tag">Owner Only</span></h2>
-            <p class="card-sub">Manage craft prices, times, and stock. Changes are stored locally in this browser.</p>
+            <p class="card-sub">Manage craft prices, times, stock, and announcements. Changes are stored locally in this browser.</p>
 
             <div id="admin-locked">
               <p class="status error">Admin access denied. Use the Login section with the correct email and password.</p>
@@ -674,9 +727,21 @@
             </div>
 
             <div id="admin-content" style="display:none;">
+              <h3 style="font-size:.85rem;margin-top:0;">Items</h3>
               <table class="admin-table" id="admin-table"></table>
-              <button class="small-btn" style="margin-top:.6rem;" onclick="saveAdminEdits()">Save Changes</button>
+              <button class="small-btn" style="margin-top:.6rem;" onclick="saveAdminEdits()">Save Item Changes</button>
               <span id="admin-status" class="status"></span>
+
+              <hr style="margin:1rem 0;border:none;border-top:1px solid #e5e7eb;">
+
+              <h3 style="font-size:.85rem;margin-top:0;">Announcements</h3>
+              <label>Title</label>
+              <input id="ann-title" placeholder="e.g. Stock reset, new items, etc.">
+              <label style="margin-top:.4rem;">Message</label>
+              <textarea id="ann-body" placeholder="Write your announcement here..."></textarea>
+              <button class="small-btn" style="margin-top:.5rem;" onclick="addAnnouncement()">Add Announcement</button>
+              <button class="small-btn" style="margin-top:.5rem;margin-left:.3rem;" onclick="clearAnnouncements()">Clear All</button>
+              <span id="ann-status" class="status"></span>
             </div>
           </div>
         </section>
@@ -684,7 +749,7 @@
     </div>
 
     <footer>
-      BusterDeals – Vault‑Corp–style crafting dashboard by Ollie Buster.
+      BusterDeals – In‑game crafting dashboard by Ollie Buster.
     </footer>
   </div>
 </div>
@@ -714,10 +779,11 @@
   const _em = () => _x('YnJpdGlzaGx1Y2lvYnVzaW5lc3NA','Z21haWwuY29t');
   const _pw = () => _x('QnVzdGVyT25Ub3Ay','MDI0');
 
-  const STORAGE_ITEMS_KEY = "bd_items_override_v3";
-  const STORAGE_CART_KEY = "bd_cart_v3";
-  const STORAGE_RECEIPT_KEY = "bd_receipt_v3";
-  const STORAGE_USER_KEY = "bd_user_local_v3";
+  const STORAGE_ITEMS_KEY = "bd_items_override_v4";
+  const STORAGE_CART_KEY = "bd_cart_v4";
+  const STORAGE_RECEIPT_KEY = "bd_receipt_v4";
+  const STORAGE_USER_KEY = "bd_user_local_v4";
+  const STORAGE_ANN_KEY = "bd_announcements_v1";
 
   // ===== NAV / PAGES =====
   function goTo(pageId){
@@ -729,6 +795,7 @@
     if(pageId==='checkout') renderCart();
     if(pageId==='receipt') loadReceipt();
     if(pageId==='admin') updateAdminVisibility();
+    if(pageId==='announcements') renderAnnouncements();
   }
   document.querySelectorAll('.sidebar-nav a[data-page]').forEach(a=>{
     a.addEventListener('click',e=>{
@@ -737,51 +804,77 @@
     });
   });
 
-  // ===== BASE CRAFTABLE ITEMS =====
+  // ===== BASE FICTIONAL CRAFTABLE ITEMS =====
   const baseItems = [
-    // Weapons
-    { id:1, name:"9mm Pistol", category:"Weapons", price:4500, time:12, desc:"Standard sidearm, reliable and compact.", outOfStock:false },
-    { id:2, name:".45 Pistol", category:"Weapons", price:5200, time:14, desc:"Higher stopping power sidearm.", outOfStock:false },
-    { id:3, name:"SMG", category:"Weapons", price:9000, time:18, desc:"Close‑quarters automatic weapon.", outOfStock:false },
-    { id:4, name:"Compact SMG", category:"Weapons", price:9800, time:20, desc:"Small frame, high fire rate.", outOfStock:false },
-    { id:5, name:"Assault Rifle", category:"Weapons", price:15000, time:25, desc:"High damage, mid‑range rifle.", outOfStock:false },
-    { id:6, name:"Battle Rifle", category:"Weapons", price:17500, time:28, desc:"Heavier rifle for serious engagements.", outOfStock:false },
-    { id:7, name:"Shotgun", category:"Weapons", price:11000, time:20, desc:"Devastating up close.", outOfStock:false },
-    { id:8, name:"Sniper Rifle", category:"Weapons", price:22000, time:35, desc:"Long‑range precision weapon.", outOfStock:false },
+    // Pistols
+    { id:1, name:"Viper‑9 Sidearm", category:"Pistol", price:4500, time:12, desc:"Compact 9‑calibre sidearm for everyday carry.", outOfStock:false },
+    { id:2, name:"Raptor‑45 Handgun", category:"Pistol", price:5200, time:14, desc:"High‑impact .45‑calibre handgun.", outOfStock:false },
+    { id:3, name:"Kestrel Compact", category:"Pistol", price:4800, time:13, desc:"Lightweight compact pistol with low recoil.", outOfStock:false },
+    { id:4, name:"Spectre Match", category:"Pistol", price:5600, time:15, desc:"Precision‑tuned sidearm for accurate shots.", outOfStock:false },
+    { id:5, name:"Nova‑10 Tactical", category:"Pistol", price:6000, time:16, desc:"Tactical pistol with extended magazine.", outOfStock:false },
+
+    // SMGs
+    { id:20, name:"Falcon SMG‑9", category:"SMG", price:9000, time:18, desc:"Close‑quarters SMG with high fire rate.", outOfStock:false },
+    { id:21, name:"Phantom SMG‑X", category:"SMG", price:9800, time:20, desc:"Compact SMG for tight urban fights.", outOfStock:false },
+    { id:22, name:"Riot SMG‑12", category:"SMG", price:10500, time:21, desc:"Stability‑focused SMG with burst mode.", outOfStock:false },
+    { id:23, name:"Echo‑PDW", category:"SMG", price:11200, time:22, desc:"Personal defence weapon with high mobility.", outOfStock:false },
+
+    // Rifles
+    { id:40, name:"Titan AR‑12", category:"Rifle", price:15000, time:25, desc:"Versatile mid‑range assault rifle.", outOfStock:false },
+    { id:41, name:"Warden AR‑17", category:"Rifle", price:16500, time:27, desc:"Heavier rifle for sustained engagements.", outOfStock:false },
+    { id:42, name:"Sentinel Carbine", category:"Rifle", price:14000, time:24, desc:"Short‑barrel carbine for mobility.", outOfStock:false },
+    { id:43, name:"Guardian Battle Rifle", category:"Rifle", price:17500, time:28, desc:"Battle rifle with strong stopping power.", outOfStock:false },
+    { id:44, name:"Ranger Marksman", category:"Rifle", price:18500, time:30, desc:"Semi‑auto marksman rifle for long lanes.", outOfStock:false },
+
+    // Shotguns
+    { id:60, name:"Bulldog Shotgun", category:"Shotgun", price:11000, time:20, desc:"Pump‑action shotgun for close‑range fights.", outOfStock:false },
+    { id:61, name:"Cerberus Tactical", category:"Shotgun", price:12500, time:22, desc:"Tactical shotgun with tighter spread.", outOfStock:false },
+    { id:62, name:"Harrier Breacher", category:"Shotgun", price:13500, time:23, desc:"Breaching shotgun for door work.", outOfStock:false },
+
+    // Snipers
+    { id:80, name:"Longshot Precision", category:"Sniper", price:22000, time:35, desc:"Bolt‑action precision rifle for long‑range.", outOfStock:false },
+    { id:81, name:"Spectral Recon", category:"Sniper", price:24000, time:38, desc:"Recon rifle with high‑power optics.", outOfStock:false },
+    { id:82, name:"Obsidian Hunter", category:"Sniper", price:26000, time:40, desc:"Heavy sniper for extreme distances.", outOfStock:false },
+
+    // Specials
+    { id:100, name:"Tempest LMG", category:"Special", price:26000, time:40, desc:"Light machine weapon for suppression.", outOfStock:false },
+    { id:101, name:"Cyclone Burst Rifle", category:"Special", price:19000, time:30, desc:"Burst‑fire rifle for controlled volleys.", outOfStock:false },
+    { id:102, name:"Valkyrie DMR", category:"Special", price:20000, time:32, desc:"Designated marksman weapon for mid‑long range.", outOfStock:false },
 
     // Ammo
-    { id:20, name:"9mm Ammo Box", category:"Ammo", price:350, time:3, desc:"Ammo for standard 9mm pistols.", outOfStock:false },
-    { id:21, name:".45 Ammo Box", category:"Ammo", price:420, time:3, desc:"Ammo for .45 pistols.", outOfStock:false },
-    { id:22, name:"SMG Ammo Box", category:"Ammo", price:550, time:4, desc:"Ammo for SMGs.", outOfStock:false },
-    { id:23, name:"Rifle Ammo Box", category:"Ammo", price:750, time:5, desc:"Ammo for rifles.", outOfStock:false },
-    { id:24, name:"Shotgun Shells", category:"Ammo", price:650, time:4, desc:"Shells for shotguns.", outOfStock:false },
+    { id:120, name:"Sidearm Ammo Pack", category:"Ammo", price:350, time:3, desc:"Ammo for standard sidearms.", outOfStock:false },
+    { id:121, name:"Heavy Pistol Ammo", category:"Ammo", price:420, time:3, desc:"Ammo for heavy pistols.", outOfStock:false },
+    { id:122, name:"SMG Ammo Pack", category:"Ammo", price:550, time:4, desc:"Ammo for SMGs.", outOfStock:false },
+    { id:123, name:"Rifle Ammo Pack", category:"Ammo", price:750, time:5, desc:"Ammo for rifles.", outOfStock:false },
+    { id:124, name:"Shotgun Shell Pack", category:"Ammo", price:650, time:4, desc:"Shells for shotguns.", outOfStock:false },
+    { id:125, name:"Sniper Round Pack", category:"Ammo", price:900, time:5, desc:"High‑precision rounds for snipers.", outOfStock:false },
 
     // Materials
-    { id:40, name:"Refined Metal", category:"Materials", price:200, time:2, desc:"Base material for most weapons.", outOfStock:false },
-    { id:41, name:"High‑Grade Metal", category:"Materials", price:450, time:4, desc:"Used for advanced weapons.", outOfStock:false },
-    { id:42, name:"Gunpowder Mix", category:"Materials", price:300, time:3, desc:"Used for ammo crafting.", outOfStock:false },
-    { id:43, name:"Polymer Components", category:"Materials", price:260, time:3, desc:"Lightweight weapon parts.", outOfStock:false },
-    { id:44, name:"Electronics Pack", category:"Materials", price:600, time:5, desc:"Used for advanced attachments.", outOfStock:false },
-    { id:45, name:"Wooden Stock Blank", category:"Materials", price:180, time:3, desc:"Base for rifle and shotgun stocks.", outOfStock:false },
+    { id:140, name:"Refined Alloy", category:"Materials", price:200, time:2, desc:"Base material for most weapons.", outOfStock:false },
+    { id:141, name:"High‑Grade Alloy", category:"Materials", price:450, time:4, desc:"Used for advanced builds.", outOfStock:false },
+    { id:142, name:"Propellant Mix", category:"Materials", price:300, time:3, desc:"Used for ammo crafting.", outOfStock:false },
+    { id:143, name:"Polymer Frame Kit", category:"Materials", price:260, time:3, desc:"Lightweight frame components.", outOfStock:false },
+    { id:144, name:"Circuitry Module", category:"Materials", price:600, time:5, desc:"Used for advanced attachments.", outOfStock:false },
+    { id:145, name:"Stock Blank", category:"Materials", price:180, time:3, desc:"Base for rifle and shotgun stocks.", outOfStock:false },
 
     // Tools
-    { id:60, name:"Basic Tool Kit", category:"Tools", price:800, time:5, desc:"Required for on‑site repairs.", outOfStock:false },
-    { id:61, name:"Advanced Tool Kit", category:"Tools", price:1500, time:8, desc:"Used for high‑tier crafting.", outOfStock:false },
-    { id:62, name:"Workbench Upgrade", category:"Tools", price:2500, time:10, desc:"Improves crafting efficiency.", outOfStock:false },
-    { id:63, name:"Precision Drill", category:"Tools", price:1200, time:7, desc:"Used for barrel and frame work.", outOfStock:false },
-    { id:64, name:"Metal Saw", category:"Tools", price:900, time:6, desc:"Cuts metal parts to size.", outOfStock:false },
+    { id:160, name:"Basic Tool Kit", category:"Tools", price:800, time:5, desc:"Required for on‑site repairs.", outOfStock:false },
+    { id:161, name:"Advanced Tool Kit", category:"Tools", price:1500, time:8, desc:"Used for high‑tier crafting.", outOfStock:false },
+    { id:162, name:"Workbench Upgrade", category:"Tools", price:2500, time:10, desc:"Improves crafting efficiency.", outOfStock:false },
+    { id:163, name:"Precision Drill", category:"Tools", price:1200, time:7, desc:"Used for barrel and frame work.", outOfStock:false },
+    { id:164, name:"Metal Saw", category:"Tools", price:900, time:6, desc:"Cuts metal parts to size.", outOfStock:false },
 
     // Furniture
-    { id:80, name:"Weapon Locker", category:"Furniture", price:6000, time:20, desc:"Secure storage for weapons.", outOfStock:false },
-    { id:81, name:"Ammo Crate", category:"Furniture", price:3500, time:15, desc:"Storage for ammunition.", outOfStock:false },
-    { id:82, name:"Workbench Table", category:"Furniture", price:2800, time:14, desc:"Dedicated crafting surface.", outOfStock:false },
-    { id:83, name:"Storage Cabinet", category:"Furniture", price:3200, time:16, desc:"General storage for materials.", outOfStock:false },
+    { id:180, name:"Weapon Locker", category:"Furniture", price:6000, time:20, desc:"Secure storage for weapons.", outOfStock:false },
+    { id:181, name:"Ammo Crate", category:"Furniture", price:3500, time:15, desc:"Storage for ammunition.", outOfStock:false },
+    { id:182, name:"Workbench Table", category:"Furniture", price:2800, time:14, desc:"Dedicated crafting surface.", outOfStock:false },
+    { id:183, name:"Storage Cabinet", category:"Furniture", price:3200, time:16, desc:"General storage for materials.", outOfStock:false },
 
     // Misc / Premium
-    { id:100, name:"Custom Engraving", category:"Premium", price:1500, time:6, desc:"Cosmetic upgrade for flex.", outOfStock:false },
-    { id:101, name:"Priority Craft Slot", category:"Premium", price:3000, time:0, desc:"Skip the queue for urgent orders.", outOfStock:false },
-    { id:102, name:"Weapon Cleaning Kit", category:"Misc", price:700, time:4, desc:"Keeps weapons in top condition.", outOfStock:false },
-    { id:103, name:"Lock Upgrade Kit", category:"Misc", price:1800, time:8, desc:"Improves locker and crate security.", outOfStock:false }
+    { id:200, name:"Custom Engraving", category:"Premium", price:1500, time:6, desc:"Cosmetic upgrade for flex.", outOfStock:false },
+    { id:201, name:"Priority Craft Slot", category:"Premium", price:3000, time:0, desc:"Skip the queue for urgent orders.", outOfStock:false },
+    { id:202, name:"Weapon Cleaning Kit", category:"Misc", price:700, time:4, desc:"Keeps weapons in top condition.", outOfStock:false },
+    { id:203, name:"Lock Upgrade Kit", category:"Misc", price:1800, time:8, desc:"Improves locker and crate security.", outOfStock:false }
   ];
 
   function getItems(){
@@ -963,7 +1056,6 @@
     localStorage.setItem(STORAGE_RECEIPT_KEY,JSON.stringify(receipt));
     cart=[];localStorage.removeItem(STORAGE_CART_KEY);saveCart();
 
-    // clear notes on successful checkout
     document.getElementById("ingame-notes").value="";
     status.textContent="Order submitted. Receipt generated.";
     status.className="status success";
@@ -986,6 +1078,77 @@
     });
     document.getElementById("r-total").textContent=r.total||0;
     document.getElementById("r-time").textContent=r.time||0;
+  }
+
+  // ===== ANNOUNCEMENTS =====
+  function getAnnouncements(){
+    try{
+      const raw=localStorage.getItem(STORAGE_ANN_KEY);
+      if(!raw) return [];
+      const parsed=JSON.parse(raw);
+      return Array.isArray(parsed)?parsed:[];
+    }catch(e){return [];}
+  }
+  function saveAnnouncements(list){
+    localStorage.setItem(STORAGE_ANN_KEY,JSON.stringify(list));
+  }
+
+  function renderAnnouncements(){
+    const listEl=document.getElementById("announcement-list");
+    const list=getAnnouncements();
+    if(!list.length){
+      listEl.innerHTML="<p class='muted'>No announcements yet.</p>";
+      return;
+    }
+    listEl.innerHTML="";
+    list.forEach(a=>{
+      const div=document.createElement("div");
+      div.className="announcement-item";
+      const title=document.createElement("div");
+      title.className="announcement-title";
+      title.textContent=a.title;
+      const meta=document.createElement("div");
+      meta.className="announcement-meta";
+      meta.textContent=a.date;
+      const body=document.createElement("div");
+      body.className="announcement-body";
+      body.textContent=a.body;
+      div.appendChild(title);
+      div.appendChild(meta);
+      div.appendChild(body);
+      listEl.appendChild(div);
+    });
+  }
+
+  function addAnnouncement(){
+    const title=document.getElementById("ann-title").value.trim();
+    const body=document.getElementById("ann-body").value.trim();
+    const status=document.getElementById("ann-status");
+    if(!title||!body){
+      status.textContent="Title and message required.";
+      status.className="status error";
+      return;
+    }
+    const list=getAnnouncements();
+    const now=new Date();
+    const stamp=now.toLocaleString();
+    list.unshift({title,body,date:stamp});
+    saveAnnouncements(list);
+    document.getElementById("ann-title").value="";
+    document.getElementById("ann-body").value="";
+    status.textContent="Announcement added.";
+    status.className="status success";
+    renderAnnouncements();
+    setTimeout(()=>{status.textContent="";},1500);
+  }
+
+  function clearAnnouncements(){
+    const status=document.getElementById("ann-status");
+    saveAnnouncements([]);
+    renderAnnouncements();
+    status.textContent="All announcements cleared.";
+    status.className="status success";
+    setTimeout(()=>{status.textContent="";},1500);
   }
 
   // ===== ADMIN PANEL =====
@@ -1031,7 +1194,7 @@
     saveItems(items);
     renderCatalogue();
     const status=document.getElementById("admin-status");
-    status.textContent="Saved.";
+    status.textContent="Item changes saved.";
     status.className="status success";
     setTimeout(()=>{status.textContent="";},1500);
   }
@@ -1103,6 +1266,7 @@
   updateMetrics();
   updateUserUI();
   updateAdminVisibility();
+  renderAnnouncements();
 </script>
 
 </body>
