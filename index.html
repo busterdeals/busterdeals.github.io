@@ -2,289 +2,784 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BusterDeals – Crafting Catalogue</title>
+<title>BusterDeals – Cheap Crafting Deals!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0d0f16;
-    color: #fff;
+  :root {
+    --bg: #020617;
+    --card: #020617;
+    --accent: #f97316;
+    --accent-soft: #fed7aa;
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --border: #1f2937;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --radius: 14px;
+    --shadow: 0 18px 45px rgba(0,0,0,0.7);
+    --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
-  header {
-    background: #111827;
-    padding: 15px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #222;
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:radial-gradient(circle at top,#0f172a 0,#020617 45%,#000 100%);
+    color:var(--text);
+    min-height:100vh;
   }
-  header h1 {
-    margin: 0;
-    color: #ffb300;
-    letter-spacing: 2px;
+  header{
+    position:sticky;top:0;z-index:20;
+    backdrop-filter:blur(18px);
+    background:linear-gradient(to right,rgba(15,23,42,0.96),rgba(15,23,42,0.9));
+    border-bottom:1px solid rgba(148,163,184,0.25);
+    box-shadow:0 10px 30px rgba(15,23,42,0.8);
+    padding:0.75rem 1.5rem;
+    display:flex;align-items:center;justify-content:space-between;
   }
-  nav a {
-    margin-left: 15px;
-    color: #ffdd80;
-    text-decoration: none;
-    font-weight: bold;
+  .logo{display:flex;align-items:center;gap:.6rem}
+  .logo-icon{
+    width:32px;height:32px;border-radius:999px;
+    background:radial-gradient(circle at 30% 20%,#fed7aa,#f97316 40%,#7c2d12 100%);
+    box-shadow:0 0 25px rgba(248,250,252,0.35);
   }
-  .page {
-    display: none;
-    padding: 25px;
-    max-width: 900px;
-    margin: auto;
+  .logo-text{
+    font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:.9rem;
   }
-  .active {
-    display: block;
+  nav{display:flex;align-items:center;gap:.75rem;font-size:.9rem}
+  nav a{
+    color:var(--muted);text-decoration:none;
+    padding:.35rem .75rem;border-radius:999px;border:1px solid transparent;
+    transition:.15s ease;
   }
-  .catalogue-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 15px;
+  nav a:hover{
+    color:var(--accent-soft);
+    border-color:rgba(148,163,184,0.4);
+    background:rgba(15,23,42,0.9);
   }
-  .item {
-    background: #1a1f2e;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #333;
+  nav a.active-link{
+    color:#0b1120;
+    background:linear-gradient(to right,#f97316,#fb923c);
+    border-color:transparent;
+    box-shadow:0 0 25px rgba(248,250,252,0.35);
   }
-  .item h3 {
-    margin-top: 0;
-    color: #ffb300;
+  .user-pill{
+    display:none;align-items:center;gap:.4rem;
+    padding:.25rem .7rem;border-radius:999px;
+    border:1px solid rgba(148,163,184,0.4);
+    background:rgba(15,23,42,0.9);
+    font-size:.8rem;color:var(--muted);
   }
-  button {
-    background: #ffb300;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
+  .user-pill span{max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user-pill button{
+    border:none;background:transparent;color:var(--accent-soft);
+    cursor:pointer;font-size:.8rem;
   }
-  button:hover {
-    background: #ffdd80;
+  main{max-width:1100px;margin:1.75rem auto 3rem;padding:0 1rem}
+  .page{display:none;animation:fadeIn .25s ease-out}
+  .page.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  .hero{
+    display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2.2fr);
+    gap:1.75rem;align-items:center;
   }
-  input, textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    border-radius: 6px;
-    border: 1px solid #444;
-    background: #0f121a;
-    color: #fff;
+  @media(max-width:800px){.hero{grid-template-columns:minmax(0,1fr)}}
+  .hero-main h1{font-size:clamp(2.1rem,3vw,2.7rem);margin-bottom:.4rem}
+  .hero-main h1 span{
+    background:linear-gradient(to right,#f97316,#fb923c,#fed7aa);
+    -webkit-background-clip:text;color:transparent;
   }
-  .card {
-    background: #1a1f2e;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    margin-bottom: 20px;
+  .hero-main p{color:var(--muted);max-width:520px;font-size:.95rem}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:.5rem;margin:.9rem 0 1.4rem}
+  .badge{
+    font-size:.75rem;padding:.25rem .6rem;border-radius:999px;
+    border:1px solid rgba(148,163,184,0.4);
+    color:var(--muted);background:rgba(15,23,42,0.9);
   }
-  .receipt-box {
-    background: #111827;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #333;
+  .badge.hot{
+    border-color:rgba(248,250,252,0.5);
+    color:var(--accent-soft);
+    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.25),rgba(15,23,42,0.95));
+  }
+  .hero-actions{display:flex;flex-wrap:wrap;gap:.75rem}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.35rem;
+    padding:.6rem 1.2rem;border-radius:999px;
+    border:1px solid rgba(148,163,184,0.4);
+    background:rgba(15,23,42,0.9);
+    color:var(--accent-soft);font-size:.9rem;font-weight:600;
+    cursor:pointer;transition:.15s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(to right,#f97316,#fb923c);
+    color:#0b1120;border-color:transparent;box-shadow:var(--shadow);
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 22px 55px rgba(0,0,0,0.85)}
+  .btn-outline:hover{
+    border-color:rgba(248,250,252,0.6);
+    background:rgba(15,23,42,0.95);
+  }
+  .hero-card{
+    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.08),rgba(15,23,42,0.98));
+    border-radius:22px;padding:1.4rem 1.3rem;
+    border:1px solid rgba(148,163,184,0.4);
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .hero-card::before{
+    content:"";position:absolute;inset:-40%;
+    background:
+      radial-gradient(circle at 0 0,rgba(248,250,252,0.12),transparent 55%),
+      radial-gradient(circle at 100% 0,rgba(248,250,252,0.08),transparent 55%);
+    opacity:.7;pointer-events:none;
+  }
+  .hero-card-inner{position:relative;z-index:1}
+  .hero-card h3{margin-top:0;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-soft)}
+  .hero-card p{font-size:.85rem;color:var(--muted)}
+  .hero-metrics{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.75rem;margin-top:.9rem;
+  }
+  .metric{
+    padding:.6rem .7rem;border-radius:12px;
+    border:1px solid rgba(148,163,184,0.4);
+    background:rgba(15,23,42,0.95);font-size:.8rem;
+  }
+  .metric strong{display:block;font-size:.95rem;color:var(--accent-soft)}
+  .section-title{margin:2.2rem 0 .8rem;font-size:1.1rem}
+  .section-sub{margin:0 0 1.4rem;color:var(--muted);font-size:.9rem}
+  .pill-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+  .pill{
+    padding:.25rem .7rem;border-radius:999px;
+    border:1px solid rgba(148,163,184,0.4);
+    font-size:.8rem;color:var(--muted);
+    cursor:pointer;background:rgba(15,23,42,0.9);
+    transition:.15s ease;
+  }
+  .pill.active{
+    background:linear-gradient(to right,#f97316,#fb923c);
+    color:#0b1120;border-color:transparent;
+  }
+  .catalogue-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1rem;
+  }
+  .item-card{
+    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
+    border-radius:var(--radius);
+    padding:.9rem .95rem;
+    border:1px solid rgba(148,163,184,0.4);
+    box-shadow:0 14px 35px rgba(15,23,42,0.9);
+    display:flex;flex-direction:column;gap:.35rem;font-size:.85rem;
+  }
+  .item-header{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
+  .item-name{font-weight:600}
+  .item-category{
+    font-size:.7rem;text-transform:uppercase;
+    letter-spacing:.12em;color:var(--muted);
+  }
+  .item-meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+  .item-desc{font-size:.8rem;color:var(--muted)}
+  .item-actions{display:flex;justify-content:space-between;align-items:center;margin-top:.4rem;gap:.4rem}
+  .qty-input{display:flex;align-items:center;gap:.25rem;font-size:.8rem;color:var(--muted)}
+  .qty-input input{
+    width:52px;padding:.25rem .35rem;border-radius:999px;
+    border:1px solid rgba(148,163,184,0.5);
+    background:rgba(15,23,42,0.95);color:var(--text);font-size:.8rem;
+  }
+  .card{
+    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
+    border-radius:18px;padding:1.1rem 1.1rem;
+    border:1px solid rgba(148,163,184,0.4);
+    box-shadow:var(--shadow);margin-bottom:1.2rem;
+  }
+  .card h3{margin-top:0;font-size:1rem}
+  label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.25rem}
+  input,textarea{
+    width:100%;padding:.5rem .6rem;border-radius:10px;
+    border:1px solid rgba(148,163,184,0.5);
+    background:rgba(15,23,42,0.95);color:var(--text);font-size:.9rem;
+  }
+  textarea{resize:vertical;min-height:70px}
+  input:focus,textarea:focus{outline:1px solid var(--accent);border-color:var(--accent)}
+  .status{font-size:.8rem;margin-top:.4rem;color:var(--muted)}
+  .status.error{color:var(--danger)}
+  .status.success{color:var(--success)}
+  ul{padding-left:1.1rem;margin:.4rem 0;font-size:.85rem}
+  .receipt-box{
+    background:radial-gradient(circle at 0 0,rgba(248,250,252,0.04),rgba(15,23,42,0.98));
+    border-radius:18px;padding:1.1rem 1.1rem;
+    border:1px solid rgba(148,163,184,0.4);
+    box-shadow:var(--shadow);font-size:.9rem;
+  }
+  .receipt-box p{margin:.2rem 0}
+  .muted{color:var(--muted);font-size:.8rem}
+  .admin-tag{
+    display:inline-flex;align-items:center;gap:.25rem;
+    font-size:.75rem;padding:.2rem .55rem;border-radius:999px;
+    border:1px solid rgba(248,250,252,0.4);
+    background:rgba(15,23,42,0.95);color:var(--accent-soft);
+    margin-left:.4rem;
+  }
+  .admin-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.5rem}
+  .admin-table th,.admin-table td{
+    border-bottom:1px solid rgba(148,163,184,0.3);
+    padding:.35rem .3rem;text-align:left;
+  }
+  .admin-table th{font-weight:600;color:var(--muted)}
+  .admin-table input{
+    width:70px;font-size:.8rem;padding:.25rem .35rem;
+    border-radius:8px;border:1px solid rgba(148,163,184,0.5);
+    background:rgba(15,23,42,0.95);color:var(--text);
+  }
+  .small-btn{
+    font-size:.75rem;padding:.25rem .6rem;border-radius:999px;
+    border:1px solid rgba(148,163,184,0.4);
+    background:rgba(15,23,42,0.95);
+    color:var(--accent-soft);cursor:pointer;
+  }
+  footer{
+    text-align:center;padding:1.2rem 1rem 1.6rem;
+    font-size:.8rem;color:var(--muted);
+    border-top:1px solid rgba(148,163,184,0.25);
+    background:radial-gradient(circle at top,rgba(15,23,42,0.9),rgba(2,6,23,1));
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>BusterDeals</h1>
+  <div class="logo">
+    <div class="logo-icon"></div>
+    <div class="logo-text">BUSTERDEALS</div>
+  </div>
   <nav>
-    <a href="#" onclick="showPage('home')">Home</a>
-    <a href="#" onclick="showPage('catalogue')">Catalogue</a>
-    <a href="#" onclick="showPage('checkout')">Checkout</a>
-    <a href="#" onclick="showPage('receipt')">Receipt</a>
+    <a href="#" data-page="home" class="active-link">Home</a>
+    <a href="#" data-page="catalogue">Catalogue</a>
+    <a href="#" data-page="checkout">Checkout</a>
+    <a href="#" data-page="receipt">Receipt</a>
+    <a href="#" data-page="admin">Admin</a>
+    <a href="#" data-page="login">Login</a>
+    <div id="user-pill" class="user-pill">
+      <span id="user-name"></span>
+      <button id="logout-btn">Logout</button>
+    </div>
   </nav>
 </header>
 
-<!-- HOME PAGE -->
-<div id="home" class="page active">
-  <h2>Welcome to BusterDeals</h2>
-  <p>The official crafting catalogue for Ollie Buster. Browse items, build an order, and get a receipt to redeem in‑game.</p>
-  <button onclick="showPage('catalogue')">Browse Catalogue</button>
-</div>
+<main>
+  <!-- HOME -->
+  <section id="home" class="page active">
+    <div class="hero">
+      <div class="hero-main">
+        <h1><span>BusterDeals</span> Crafting Network</h1>
+        <p>Browse every craftable item, build an order, and get a receipt to hand to <strong>Ollie Buster</strong> in‑game via text, phone, or in person.</p>
+        <div class="hero-badges">
+          <div class="badge hot">Live RP Orders</div>
+          <div class="badge">Neon Single‑Page UI</div>
+          <div class="badge">In‑Game Phone + Bank Checkout</div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="goTo('catalogue')">Open Catalogue</button>
+          <button class="btn btn-outline" onclick="goTo('checkout')">View Checkout</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-inner">
+          <h3>Order Snapshot</h3>
+          <p class="muted">Quick overview of your current cart and craft load.</p>
+          <div class="hero-metrics">
+            <div class="metric">
+              <strong id="metric-items">0 items</strong>
+              <span class="muted">In your current order</span>
+            </div>
+            <div class="metric">
+              <strong id="metric-total">0 credits</strong>
+              <span class="muted">Estimated total cost</span>
+            </div>
+            <div class="metric">
+              <strong id="metric-time">0 min</strong>
+              <span class="muted">Total craft time</span>
+            </div>
+            <div class="metric">
+              <strong>Redeem In‑Game</strong>
+              <span class="muted">Show receipt to Ollie Buster to collect</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<!-- CATALOGUE PAGE -->
-<div id="catalogue" class="page">
-  <h2>Item Catalogue</h2>
-  <div class="catalogue-grid" id="catalogue-grid"></div>
-</div>
+    <h2 class="section-title">How it works</h2>
+    <p class="section-sub">Simple flow designed for RP. No accounts for players, just receipts.</p>
+    <div class="card">
+      <ul>
+        <li><strong>1.</strong> Open the <strong>Catalogue</strong> and add items to your order.</li>
+        <li><strong>2.</strong> Go to <strong>Checkout</strong>, enter your in‑game name, phone, and bank number.</li>
+        <li><strong>3.</strong> Submit to generate a unique <strong>BusterDeals receipt code</strong>.</li>
+        <li><strong>4.</strong> Show that code to <strong>Ollie Buster</strong> in‑game via text, phone, or in person.</li>
+      </ul>
+    </div>
+  </section>
 
-<!-- CHECKOUT PAGE -->
-<div id="checkout" class="page">
-  <h2>Your Order</h2>
-  <div id="cart-list" class="card"></div>
+  <!-- CATALOGUE -->
+  <section id="catalogue" class="page">
+    <h2 class="section-title">Catalogue</h2>
+    <p class="section-sub">Filter by category and stack your order. Prices and times are editable from the admin panel.</p>
 
-  <h3>Enter Your In‑Game Details</h3>
-  <div class="card">
-    <label>In‑Game Name</label>
-    <input id="ingame-name">
+    <div class="pill-row" id="category-filters"></div>
+    <div class="catalogue-grid" id="catalogue-grid"></div>
+  </section>
 
-    <label>In‑Game Phone Number</label>
-    <input id="ingame-phone">
+  <!-- CHECKOUT -->
+  <section id="checkout" class="page">
+    <h2 class="section-title">Checkout</h2>
+    <p class="section-sub">Review your order and enter your in‑game details. This is for RP tracking only.</p>
 
-    <label>Bank Number</label>
-    <input id="ingame-bank">
+    <div class="card">
+      <h3>Order Summary</h3>
+      <div id="cart-list"></div>
+    </div>
 
-    <label>Notes (optional)</label>
-    <textarea id="ingame-notes"></textarea>
+    <div class="card">
+      <h3>In‑Game Details</h3>
+      <label>In‑Game Name</label>
+      <input id="ingame-name" placeholder="e.g. Ollie Buster">
 
-    <button onclick="submitOrder()">Submit Order</button>
-    <p id="checkout-status"></p>
-  </div>
-</div>
+      <label>In‑Game Phone Number</label>
+      <input id="ingame-phone" placeholder="e.g. 123‑456">
 
-<!-- RECEIPT PAGE -->
-<div id="receipt" class="page">
-  <h2>Your Receipt</h2>
-  <div class="receipt-box">
-    <p><strong>Order Code:</strong> <span id="r-code"></span></p>
-    <p><strong>Name:</strong> <span id="r-name"></span></p>
-    <p><strong>Phone:</strong> <span id="r-phone"></span></p>
-    <p><strong>Bank:</strong> <span id="r-bank"></span></p>
-    <p><strong>Notes:</strong> <span id="r-notes"></span></p>
+      <label>Bank Number</label>
+      <input id="ingame-bank" placeholder="e.g. 12345678">
 
-    <h3>Items</h3>
-    <ul id="r-items"></ul>
+      <label>Notes (optional)</label>
+      <textarea id="ingame-notes" placeholder="Where to meet, preferred time, extra info..."></textarea>
 
-    <p><strong>Total Price:</strong> <span id="r-total"></span></p>
-    <p><strong>Total Craft Time:</strong> <span id="r-time"></span> minutes</p>
-  </div>
-</div>
+      <button class="btn btn-primary" style="margin-top:0.7rem;" onclick="submitOrder()">Submit Order & Generate Receipt</button>
+      <div id="checkout-status" class="status"></div>
+    </div>
+  </section>
+
+  <!-- RECEIPT -->
+  <section id="receipt" class="page">
+    <h2 class="section-title">Receipt</h2>
+    <p class="section-sub">Show this receipt to <strong>Ollie Buster</strong> in‑game to get your order crafted.</p>
+
+    <div class="receipt-box">
+      <p><strong>Order Code:</strong> <span id="r-code"></span></p>
+      <p><strong>Name:</strong> <span id="r-name"></span></p>
+      <p><strong>Phone:</strong> <span id="r-phone"></span></p>
+      <p><strong>Bank:</strong> <span id="r-bank"></span></p>
+      <p><strong>Notes:</strong> <span id="r-notes"></span></p>
+
+      <h3 style="margin-top:0.8rem;">Items</h3>
+      <ul id="r-items"></ul>
+
+      <p><strong>Total Price:</strong> <span id="r-total"></span></p>
+      <p><strong>Total Craft Time:</strong> <span id="r-time"></span> minutes</p>
+
+      <p class="muted" style="margin-top:0.8rem;">Tip: Screenshot this page or keep it open before joining the server.</p>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="login" class="page">
+    <h2 class="section-title">Admin Login</h2>
+    <p class="section-sub">Owner‑only access. Email + password required.</p>
+
+    <div class="card">
+      <label>Admin Email</label>
+      <input id="admin-email" placeholder="Your admin email">
+
+      <label>Password</label>
+      <input id="admin-pass" type="password" placeholder="Admin password">
+
+      <button class="btn btn-primary" style="margin-top:0.7rem;" onclick="adminLogin()">Login</button>
+      <div id="login-status" class="status"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="admin" class="page">
+    <h2 class="section-title">Admin Panel <span class="admin-tag">Owner Only</span></h2>
+    <p class="section-sub">Manage item prices and craft times. Changes are stored locally in this browser.</p>
+
+    <div id="admin-locked" class="card">
+      <p class="status error">Admin access denied. Use the Login page with the correct email and password.</p>
+      <button class="btn btn-outline" onclick="goTo('login')">Go to Login</button>
+    </div>
+
+    <div id="admin-content" style="display:none;">
+      <div class="card">
+        <h3>Items</h3>
+        <table class="admin-table" id="admin-table"></table>
+        <button class="small-btn" style="margin-top:0.6rem;" onclick="saveAdminEdits()">Save Changes</button>
+        <span id="admin-status" class="status"></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © BusterDeals – Crafted for in‑game RP by Ollie Buster.
+</footer>
 
 <script>
-// ---------------------- PAGE SWITCHING ----------------------
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (id === 'checkout') renderCart();
-  if (id === 'receipt') loadReceipt();
-}
+  // ===== Basic anti‑inspect (only stops casuals) =====
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', e => {
+    if (e.key === 'F12') e.preventDefault();
+    if (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) e.preventDefault();
+    if (e.ctrlKey && e.key === 'U') e.preventDefault();
+  });
 
-// ---------------------- ITEM DATA ----------------------
-const items = [
-  { id: 1, name: "Pistol Ammo", price: 250, time: 3 },
-  { id: 2, name: "SMG Ammo", price: 400, time: 4 },
-  { id: 3, name: "Rifle Ammo", price: 600, time: 5 },
-  { id: 4, name: "Shotgun Ammo", price: 700, time: 6 },
-  { id: 5, name: "Crafting Components", price: 150, time: 2 },
-  { id: 6, name: "Tool Kit", price: 500, time: 4 }
-];
+  // ===== Obfuscated admin credentials (still discoverable by pros) =====
+  const _e = () => atob('YnJpdGlzaGx1Y2lvYnVzaW5lc3NAZ21haWwuY29t'); // email
+  const _p = () => atob('QnVzdGVyT25Ub3AyMDI0'); // password
 
-// ---------------------- RENDER CATALOGUE ----------------------
-const grid = document.getElementById("catalogue-grid");
-items.forEach(item => {
-  const div = document.createElement("div");
-  div.className = "item";
-  div.innerHTML = `
-    <h3>${item.name}</h3>
-    <p>Price: ${item.price} credits</p>
-    <p>Craft Time: ${item.time} min</p>
-    <button onclick="addToCart(${item.id})">Add to Order</button>
-  `;
-  grid.appendChild(div);
-});
+  const STORAGE_ITEMS_KEY = "bd_items_override";
+  const STORAGE_CART_KEY = "bd_cart";
+  const STORAGE_RECEIPT_KEY = "bd_receipt";
+  const STORAGE_USER_KEY = "bd_user_local";
 
-// ---------------------- CART SYSTEM ----------------------
-let cart = JSON.parse(localStorage.getItem("bd_cart") || "[]");
+  // ===== NAV / PAGES =====
+  function goTo(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    document.querySelectorAll('nav a[data-page]').forEach(a=>{
+      a.classList.toggle('active-link',a.getAttribute('data-page')===pageId);
+    });
+    if(pageId==='checkout') renderCart();
+    if(pageId==='receipt') loadReceipt();
+    if(pageId==='admin') updateAdminVisibility();
+  }
+  document.querySelectorAll('nav a[data-page]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      goTo(a.getAttribute('data-page'));
+    });
+  });
 
-function addToCart(id) {
-  const item = items.find(i => i.id === id);
-  const existing = cart.find(i => i.id === id);
+  // ===== ITEMS =====
+  const baseItems = [
+    { id:1, name:"9mm Pistol", category:"Weapons", price:4500, time:12, desc:"Standard sidearm, reliable and compact." },
+    { id:2, name:"SMG", category:"Weapons", price:9000, time:18, desc:"Close‑quarters spray machine." },
+    { id:3, name:"Assault Rifle", category:"Weapons", price:15000, time:25, desc:"High damage, mid‑range rifle." },
+    { id:4, name:"Shotgun", category:"Weapons", price:11000, time:20, desc:"Devastating up close." },
+    { id:5, name:"Pistol Ammo Box", category:"Ammo", price:350, time:3, desc:"Ammo for standard pistols." },
+    { id:6, name:"SMG Ammo Box", category:"Ammo", price:550, time:4, desc:"Ammo for SMGs." },
+    { id:7, name:"Rifle Ammo Box", category:"Ammo", price:750, time:5, desc:"Ammo for rifles." },
+    { id:8, name:"Shotgun Shells", category:"Ammo", price:650, time:4, desc:"Shells for shotguns." },
+    { id:9, name:"Metal Parts", category:"Components", price:200, time:2, desc:"Base material for most weapons." },
+    { id:10, name:"Gunpowder Mix", category:"Components", price:300, time:3, desc:"Used for ammo crafting." },
+    { id:11, name:"Weapon Frame", category:"Components", price:1200, time:8, desc:"Core frame for advanced weapons." },
+    { id:12, name:"Tool Kit", category:"Tools", price:800, time:5, desc:"Required for on‑site repairs." },
+    { id:13, name:"Workbench Upgrade", category:"Tools", price:2500, time:10, desc:"Improves crafting efficiency." },
+    { id:14, name:"Custom Engraving", category:"Premium", price:1500, time:6, desc:"Cosmetic upgrade for flex." },
+    { id:15, name:"Priority Craft Slot", category:"Premium", price:3000, time:0, desc:"Skip the queue for urgent orders." }
+  ];
 
-  if (existing) existing.qty++;
-  else cart.push({ ...item, qty: 1 });
+  function getItems(){
+    const o = localStorage.getItem(STORAGE_ITEMS_KEY);
+    if(!o) return baseItems.slice();
+    try{
+      const p = JSON.parse(o);
+      if(Array.isArray(p)) return p;
+    }catch(e){}
+    return baseItems.slice();
+  }
+  function saveItems(items){localStorage.setItem(STORAGE_ITEMS_KEY,JSON.stringify(items));}
 
-  localStorage.setItem("bd_cart", JSON.stringify(cart));
-  alert("Added to order.");
-}
+  let items = getItems();
 
-function renderCart() {
-  const box = document.getElementById("cart-list");
+  // ===== CATALOGUE =====
+  const catalogueGrid = document.getElementById("catalogue-grid");
+  const categoryFilters = document.getElementById("category-filters");
+  let activeCategory = "All";
 
-  if (cart.length === 0) {
-    box.innerHTML = "<p>No items in your order.</p>";
-    return;
+  function buildCategoryFilters(){
+    const cats = Array.from(new Set(items.map(i=>i.category))).sort();
+    const all = ["All",...cats];
+    categoryFilters.innerHTML="";
+    all.forEach(cat=>{
+      const pill=document.createElement("button");
+      pill.className="pill"+(cat===activeCategory?" active":"");
+      pill.textContent=cat;
+      pill.addEventListener("click",()=>{
+        activeCategory=cat;
+        buildCategoryFilters();
+        renderCatalogue();
+      });
+      categoryFilters.appendChild(pill);
+    });
   }
 
-  let html = "<ul>";
-  let total = 0;
-  let time = 0;
+  function renderCatalogue(){
+    catalogueGrid.innerHTML="";
+    const filtered = activeCategory==="All"?items:items.filter(i=>i.category===activeCategory);
+    filtered.forEach(item=>{
+      const card=document.createElement("div");
+      card.className="item-card";
 
-  cart.forEach(i => {
-    html += `<li>${i.name} x${i.qty} — ${i.price * i.qty} credits</li>`;
-    total += i.price * i.qty;
-    time += i.time * i.qty;
-  });
+      const header=document.createElement("div");
+      header.className="item-header";
+      const name=document.createElement("div");
+      name.className="item-name";
+      name.textContent=item.name;
+      const cat=document.createElement("div");
+      cat.className="item-category";
+      cat.textContent=item.category;
+      header.appendChild(name);header.appendChild(cat);
 
-  html += "</ul>";
-  html += `<p><strong>Total Price:</strong> ${total}</p>`;
-  html += `<p><strong>Total Craft Time:</strong> ${time} minutes</p>`;
+      const meta=document.createElement("div");
+      meta.className="item-meta";
+      meta.innerHTML=`<span>${item.price} credits</span><span>${item.time} min craft</span>`;
 
-  box.innerHTML = html;
-}
+      const desc=document.createElement("div");
+      desc.className="item-desc";
+      desc.textContent=item.desc||"";
 
-// ---------------------- SUBMIT ORDER ----------------------
-function submitOrder() {
-  const name = document.getElementById("ingame-name").value.trim();
-  const phone = document.getElementById("ingame-phone").value.trim();
-  const bank = document.getElementById("ingame-bank").value.trim();
-  const notes = document.getElementById("ingame-notes").value.trim();
-  const status = document.getElementById("checkout-status");
+      const actions=document.createElement("div");
+      actions.className="item-actions";
 
-  if (!name || !phone || !bank) {
-    status.textContent = "Please fill in all required fields.";
-    return;
+      const qtyWrap=document.createElement("div");
+      qtyWrap.className="qty-input";
+      qtyWrap.innerHTML="<span>Qty</span>";
+      const qtyInput=document.createElement("input");
+      qtyInput.type="number";qtyInput.min="1";qtyInput.value="1";
+      qtyWrap.appendChild(qtyInput);
+
+      const btn=document.createElement("button");
+      btn.className="btn btn-outline";
+      btn.textContent="Add to Order";
+      btn.addEventListener("click",()=>{
+        const qty=Math.max(1,parseInt(qtyInput.value,10)||1);
+        addToCart(item.id,qty);
+      });
+
+      actions.appendChild(qtyWrap);
+      actions.appendChild(btn);
+
+      card.appendChild(header);
+      card.appendChild(meta);
+      card.appendChild(desc);
+      card.appendChild(actions);
+
+      catalogueGrid.appendChild(card);
+    });
   }
 
-  const code = "BD-" + Math.floor(10000 + Math.random() * 90000);
+  // ===== CART =====
+  let cart = JSON.parse(localStorage.getItem(STORAGE_CART_KEY) || "[]");
 
-  let total = 0;
-  let time = 0;
-  cart.forEach(i => {
-    total += i.price * i.qty;
-    time += i.time * i.qty;
-  });
+  function saveCart(){
+    localStorage.setItem(STORAGE_CART_KEY,JSON.stringify(cart));
+    updateMetrics();
+  }
 
-  const receipt = {
-    code, name, phone, bank, notes,
-    items: cart,
-    total, time
-  };
+  function addToCart(id,qty){
+    const item=items.find(i=>i.id===id);
+    if(!item) return;
+    const existing=cart.find(i=>i.id===id);
+    if(existing) existing.qty+=qty;
+    else cart.push({...item,qty});
+    saveCart();
+    alert("Added to order.");
+  }
 
-  localStorage.setItem("bd_receipt", JSON.stringify(receipt));
-  cart = [];
-  localStorage.removeItem("bd_cart");
+  function renderCart(){
+    const box=document.getElementById("cart-list");
+    if(!cart.length){
+      box.innerHTML="<p class='muted'>No items in your order. Go to the catalogue first.</p>";
+      return;
+    }
+    let html="<ul>";
+    let total=0,time=0;
+    cart.forEach(i=>{
+      const itemTotal=i.price*i.qty;
+      const itemTime=i.time*i.qty;
+      total+=itemTotal;time+=itemTime;
+      html+=`<li>${i.name} x${i.qty} — ${itemTotal} credits (${itemTime} min)</li>`;
+    });
+    html+="</ul>";
+    html+=`<p><strong>Total Price:</strong> ${total} credits</p>`;
+    html+=`<p><strong>Total Craft Time:</strong> ${time} minutes</p>`;
+    box.innerHTML=html;
+  }
 
-  status.textContent = "Order submitted. Your receipt is ready.";
-  showPage("receipt");
-}
+  function updateMetrics(){
+    let total=0,time=0,count=0;
+    cart.forEach(i=>{
+      total+=i.price*i.qty;
+      time+=i.time*i.qty;
+      count+=i.qty;
+    });
+    document.getElementById("metric-items").textContent=`${count} item${count===1?"":"s"}`;
+    document.getElementById("metric-total").textContent=`${total} credits`;
+    document.getElementById("metric-time").textContent=`${time} min`;
+  }
 
-// ---------------------- LOAD RECEIPT ----------------------
-function loadReceipt() {
-  const r = JSON.parse(localStorage.getItem("bd_receipt") || "{}");
+  // ===== CHECKOUT / RECEIPT =====
+  function submitOrder(){
+    const name=document.getElementById("ingame-name").value.trim();
+    const phone=document.getElementById("ingame-phone").value.trim();
+    const bank=document.getElementById("ingame-bank").value.trim();
+    const notes=document.getElementById("ingame-notes").value.trim();
+    const status=document.getElementById("checkout-status");
 
-  document.getElementById("r-code").textContent = r.code || "";
-  document.getElementById("r-name").textContent = r.name || "";
-  document.getElementById("r-phone").textContent = r.phone || "";
-  document.getElementById("r-bank").textContent = r.bank || "";
-  document.getElementById("r-notes").textContent = r.notes || "";
+    if(!cart.length){
+      status.textContent="No items in your order.";
+      status.className="status error";
+      return;
+    }
+    if(!name||!phone||!bank){
+      status.textContent="Please fill in name, phone, and bank number.";
+      status.className="status error";
+      return;
+    }
 
-  const list = document.getElementById("r-items");
-  list.innerHTML = "";
+    const code="BD-"+Math.floor(10000+Math.random()*90000);
+    let total=0,time=0;
+    cart.forEach(i=>{
+      total+=i.price*i.qty;
+      time+=i.time*i.qty;
+    });
 
-  (r.items || []).forEach(i => {
-    const li = document.createElement("li");
-    li.textContent = `${i.name} x${i.qty}`;
-    list.appendChild(li);
-  });
+    const receipt={code,name,phone,bank,notes,items:cart,total,time};
+    localStorage.setItem(STORAGE_RECEIPT_KEY,JSON.stringify(receipt));
+    cart=[];localStorage.removeItem(STORAGE_CART_KEY);saveCart();
 
-  document.getElementById("r-total").textContent = r.total || 0;
-  document.getElementById("r-time").textContent = r.time || 0;
-}
+    status.textContent="Order submitted. Receipt generated.";
+    status.className="status success";
+    goTo("receipt");
+  }
+
+  function loadReceipt(){
+    const r=JSON.parse(localStorage.getItem(STORAGE_RECEIPT_KEY)||"{}");
+    document.getElementById("r-code").textContent=r.code||"";
+    document.getElementById("r-name").textContent=r.name||"";
+    document.getElementById("r-phone").textContent=r.phone||"";
+    document.getElementById("r-bank").textContent=r.bank||"";
+    document.getElementById("r-notes").textContent=r.notes||"";
+    const list=document.getElementById("r-items");
+    list.innerHTML="";
+    (r.items||[]).forEach(i=>{
+      const li=document.createElement("li");
+      li.textContent=`${i.name} x${i.qty}`;
+      list.appendChild(li);
+    });
+    document.getElementById("r-total").textContent=r.total||0;
+    document.getElementById("r-time").textContent=r.time||0;
+  }
+
+  // ===== ADMIN PANEL =====
+  function buildAdminTable(){
+    const table=document.getElementById("admin-table");
+    table.innerHTML=`
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Time</th>
+      </tr>
+    `;
+    items.forEach(item=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td>${item.name}</td>
+        <td>${item.category}</td>
+        <td><input type="number" data-id="${item.id}" data-field="price" value="${item.price}"></td>
+        <td><input type="number" data-id="${item.id}" data-field="time" value="${item.time}"></td>
+      `;
+      table.appendChild(tr);
+    });
+  }
+
+  function saveAdminEdits(){
+    const inputs=document.querySelectorAll("#admin-table input");
+    inputs.forEach(input=>{
+      const id=parseInt(input.getAttribute("data-id"),10);
+      const field=input.getAttribute("data-field");
+      const value=parseInt(input.value,10)||0;
+      const item=items.find(i=>i.id===id);
+      if(item&&(field==="price"||field==="time")) item[field]=value;
+    });
+    saveItems(items);
+    buildCategoryFilters();
+    renderCatalogue();
+    const status=document.getElementById("admin-status");
+    status.textContent="Saved.";
+    status.className="status success";
+    setTimeout(()=>{status.textContent="";},1500);
+  }
+
+  function updateAdminVisibility(){
+    const user=JSON.parse(localStorage.getItem(STORAGE_USER_KEY)||"null");
+    const locked=document.getElementById("admin-locked");
+    const content=document.getElementById("admin-content");
+    if(!user||!user.isAdmin){
+      locked.style.display="block";
+      content.style.display="none";
+    }else{
+      locked.style.display="none";
+      content.style.display="block";
+      buildAdminTable();
+    }
+  }
+
+  // ===== LOCAL "AUTH" =====
+  const userPill=document.getElementById("user-pill");
+  const userNameSpan=document.getElementById("user-name");
+  const logoutBtn=document.getElementById("logout-btn");
+
+  function updateUserUI(){
+    const user=JSON.parse(localStorage.getItem(STORAGE_USER_KEY)||"null");
+    if(user&&user.isAdmin){
+      userPill.style.display="flex";
+      userNameSpan.textContent=user.email;
+    }else{
+      userPill.style.display="none";
+    }
+  }
+
+  function adminLogin(){
+    const email=document.getElementById("admin-email").value.trim();
+    const pass=document.getElementById("admin-pass").value;
+    const status=document.getElementById("login-status");
+
+    if(!email||!pass){
+      status.textContent="Enter email and password.";
+      status.className="status error";
+      return;
+    }
+
+    if(email===_e() && pass===_p()){
+      const user={email,isAdmin:true};
+      localStorage.setItem(STORAGE_USER_KEY,JSON.stringify(user));
+      status.textContent="Admin login successful.";
+      status.className="status success";
+      updateUserUI();
+      updateAdminVisibility();
+      setTimeout(()=>goTo("admin"),600);
+    }else{
+      status.textContent="Invalid credentials.";
+      status.className="status error";
+    }
+  }
+
+  if(logoutBtn){
+    logoutBtn.addEventListener("click",()=>{
+      localStorage.removeItem(STORAGE_USER_KEY);
+      updateUserUI();
+      updateAdminVisibility();
+    });
+  }
+
+  // ===== INIT =====
+  buildCategoryFilters();
+  renderCatalogue();
+  updateMetrics();
+  updateUserUI();
+  updateAdminVisibility();
 </script>
 
 </body>
