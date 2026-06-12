@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BusterDeals – Crafting Catalogue</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d0f16;
+    color: #fff;
+  }
+  header {
+    background: #111827;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #222;
+  }
+  header h1 {
+    margin: 0;
+    color: #ffb300;
+    letter-spacing: 2px;
+  }
+  nav a {
+    margin-left: 15px;
+    color: #ffdd80;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .page {
+    display: none;
+    padding: 25px;
+    max-width: 900px;
+    margin: auto;
+  }
+  .active {
+    display: block;
+  }
+  .catalogue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+  }
+  .item {
+    background: #1a1f2e;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #333;
+  }
+  .item h3 {
+    margin-top: 0;
+    color: #ffb300;
+  }
+  button {
+    background: #ffb300;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  button:hover {
+    background: #ffdd80;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #0f121a;
+    color: #fff;
+  }
+  .card {
+    background: #1a1f2e;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+  }
+  .receipt-box {
+    background: #111827;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #333;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BusterDeals</h1>
+  <nav>
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('catalogue')">Catalogue</a>
+    <a href="#" onclick="showPage('checkout')">Checkout</a>
+    <a href="#" onclick="showPage('receipt')">Receipt</a>
+  </nav>
+</header>
+
+<!-- HOME PAGE -->
+<div id="home" class="page active">
+  <h2>Welcome to BusterDeals</h2>
+  <p>The official crafting catalogue for Ollie Buster. Browse items, build an order, and get a receipt to redeem in‑game.</p>
+  <button onclick="showPage('catalogue')">Browse Catalogue</button>
+</div>
+
+<!-- CATALOGUE PAGE -->
+<div id="catalogue" class="page">
+  <h2>Item Catalogue</h2>
+  <div class="catalogue-grid" id="catalogue-grid"></div>
+</div>
+
+<!-- CHECKOUT PAGE -->
+<div id="checkout" class="page">
+  <h2>Your Order</h2>
+  <div id="cart-list" class="card"></div>
+
+  <h3>Enter Your In‑Game Details</h3>
+  <div class="card">
+    <label>In‑Game Name</label>
+    <input id="ingame-name">
+
+    <label>In‑Game Phone Number</label>
+    <input id="ingame-phone">
+
+    <label>Bank Number</label>
+    <input id="ingame-bank">
+
+    <label>Notes (optional)</label>
+    <textarea id="ingame-notes"></textarea>
+
+    <button onclick="submitOrder()">Submit Order</button>
+    <p id="checkout-status"></p>
+  </div>
+</div>
+
+<!-- RECEIPT PAGE -->
+<div id="receipt" class="page">
+  <h2>Your Receipt</h2>
+  <div class="receipt-box">
+    <p><strong>Order Code:</strong> <span id="r-code"></span></p>
+    <p><strong>Name:</strong> <span id="r-name"></span></p>
+    <p><strong>Phone:</strong> <span id="r-phone"></span></p>
+    <p><strong>Bank:</strong> <span id="r-bank"></span></p>
+    <p><strong>Notes:</strong> <span id="r-notes"></span></p>
+
+    <h3>Items</h3>
+    <ul id="r-items"></ul>
+
+    <p><strong>Total Price:</strong> <span id="r-total"></span></p>
+    <p><strong>Total Craft Time:</strong> <span id="r-time"></span> minutes</p>
+  </div>
+</div>
+
+<script>
+// ---------------------- PAGE SWITCHING ----------------------
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'checkout') renderCart();
+  if (id === 'receipt') loadReceipt();
+}
+
+// ---------------------- ITEM DATA ----------------------
+const items = [
+  { id: 1, name: "Pistol Ammo", price: 250, time: 3 },
+  { id: 2, name: "SMG Ammo", price: 400, time: 4 },
+  { id: 3, name: "Rifle Ammo", price: 600, time: 5 },
+  { id: 4, name: "Shotgun Ammo", price: 700, time: 6 },
+  { id: 5, name: "Crafting Components", price: 150, time: 2 },
+  { id: 6, name: "Tool Kit", price: 500, time: 4 }
+];
+
+// ---------------------- RENDER CATALOGUE ----------------------
+const grid = document.getElementById("catalogue-grid");
+items.forEach(item => {
+  const div = document.createElement("div");
+  div.className = "item";
+  div.innerHTML = `
+    <h3>${item.name}</h3>
+    <p>Price: ${item.price} credits</p>
+    <p>Craft Time: ${item.time} min</p>
+    <button onclick="addToCart(${item.id})">Add to Order</button>
+  `;
+  grid.appendChild(div);
+});
+
+// ---------------------- CART SYSTEM ----------------------
+let cart = JSON.parse(localStorage.getItem("bd_cart") || "[]");
+
+function addToCart(id) {
+  const item = items.find(i => i.id === id);
+  const existing = cart.find(i => i.id === id);
+
+  if (existing) existing.qty++;
+  else cart.push({ ...item, qty: 1 });
+
+  localStorage.setItem("bd_cart", JSON.stringify(cart));
+  alert("Added to order.");
+}
+
+function renderCart() {
+  const box = document.getElementById("cart-list");
+
+  if (cart.length === 0) {
+    box.innerHTML = "<p>No items in your order.</p>";
+    return;
+  }
+
+  let html = "<ul>";
+  let total = 0;
+  let time = 0;
+
+  cart.forEach(i => {
+    html += `<li>${i.name} x${i.qty} — ${i.price * i.qty} credits</li>`;
+    total += i.price * i.qty;
+    time += i.time * i.qty;
+  });
+
+  html += "</ul>";
+  html += `<p><strong>Total Price:</strong> ${total}</p>`;
+  html += `<p><strong>Total Craft Time:</strong> ${time} minutes</p>`;
+
+  box.innerHTML = html;
+}
+
+// ---------------------- SUBMIT ORDER ----------------------
+function submitOrder() {
+  const name = document.getElementById("ingame-name").value.trim();
+  const phone = document.getElementById("ingame-phone").value.trim();
+  const bank = document.getElementById("ingame-bank").value.trim();
+  const notes = document.getElementById("ingame-notes").value.trim();
+  const status = document.getElementById("checkout-status");
+
+  if (!name || !phone || !bank) {
+    status.textContent = "Please fill in all required fields.";
+    return;
+  }
+
+  const code = "BD-" + Math.floor(10000 + Math.random() * 90000);
+
+  let total = 0;
+  let time = 0;
+  cart.forEach(i => {
+    total += i.price * i.qty;
+    time += i.time * i.qty;
+  });
+
+  const receipt = {
+    code, name, phone, bank, notes,
+    items: cart,
+    total, time
+  };
+
+  localStorage.setItem("bd_receipt", JSON.stringify(receipt));
+  cart = [];
+  localStorage.removeItem("bd_cart");
+
+  status.textContent = "Order submitted. Your receipt is ready.";
+  showPage("receipt");
+}
+
+// ---------------------- LOAD RECEIPT ----------------------
+function loadReceipt() {
+  const r = JSON.parse(localStorage.getItem("bd_receipt") || "{}");
+
+  document.getElementById("r-code").textContent = r.code || "";
+  document.getElementById("r-name").textContent = r.name || "";
+  document.getElementById("r-phone").textContent = r.phone || "";
+  document.getElementById("r-bank").textContent = r.bank || "";
+  document.getElementById("r-notes").textContent = r.notes || "";
+
+  const list = document.getElementById("r-items");
+  list.innerHTML = "";
+
+  (r.items || []).forEach(i => {
+    const li = document.createElement("li");
+    li.textContent = `${i.name} x${i.qty}`;
+    list.appendChild(li);
+  });
+
+  document.getElementById("r-total").textContent = r.total || 0;
+  document.getElementById("r-time").textContent = r.time || 0;
+}
+</script>
+
+</body>
+</html>
